@@ -228,6 +228,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/duck.jpeg">
+      <meta itemprop="name" content="Yiyang Wang">
+      <meta itemprop="description" content="This is my blog recording what I've learned.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yiyang Wang's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/" class="post-title-link" itemprop="url">Writeup for The Multics Virtual Memory: Concepts and Design</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-18 09:46:28" itemprop="dateCreated datePublished" datetime="2022-10-18T09:46:28+08:00">2022-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-20 21:48:30" itemprop="dateModified" datetime="2022-10-20T21:48:30+08:00">2022-10-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/operating-system/" itemprop="url" rel="index"><span itemprop="name">operating system</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="writeup-for-the-multics-virtual-memory-concepts-and-design1970">Writeup for <em>The Multics Virtual Memory: Concepts and Design(1970)</em></h1>
+<h2 id="what-is-this-paper-talking-about">What is this paper talking about?</h2>
+<p>This is a definition paper which talks about the design and implementation of the virtual memory mechanism in Multics(Multiplexed Information and Computing Service). The Multics system is a segmented system where equal-size pages compose of every segment and segments are packages of information that are directly addressed and have a set of access attributes that are checked by hardware whenever they are referenced by any user. Each segment owns <strong>at most</strong> a page table and each process is able to know about and connect to several segments</p>
+<h2 id="what-is-the-motivation">What is the motivation?</h2>
+<p>Previous systems that used only paging, only segementaion or the combination of both wern&apos;t able to meet the requirements to support the <strong>rapid</strong> but <strong>controlled</strong> sharing of information stored on-line, which requires not only the software design but also the hardware support. Aiming at solving this problem, the Multics system provides a segmentation and paging mechanism that satisfies two design goals:</p>
+<ul>
+<li>All on-line information, i.e. information stored in the core memory, is addressed directly by a processor and hence referenced directly by any user. (rapid, shared)</li>
+<li>All the references to all on-line information are under control according to their and the information&apos;s privilege levels. (controlled)</li>
+</ul>
+<h2 id="benefits-over-the-state-of-the-art">Benefits over the &quot;state-of-the-art&quot;</h2>
+<ul>
+<li>All on-line information can be referenced directly by any user as long as it passes the privilege check. Information is both sharable and controllable in the Multics system compared with the previous systems.</li>
+<li>The segmentation abstract is fully managed by the supervisor and the number of the segment descriptors is sufficiently large enough, so the Multics user doesn&apos;t have to manage the segment descriptors and it can just directly operate on the original information that retains its identity and attributes instead of the copies of the information.</li>
+<li>The combination of the paging and segmentation mechanism makes it needless to store all the information of a segment on the core memory for only the needed pages will reside in the memory, which allows a segment to be large enough compared to the size of a page.</li>
+<li>The policy applied in the Multics system that tries to only keep the segments in use be active, only keep the pages in use in the core memory and make a process know about the segments only when they are needed by this process fully exploits the physical memory.</li>
+</ul>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li>The privilege checks are only performed on the segmentation level, i.e. the page table entries don&apos;t specify the access levels, which makes it not flexible enough to manage the access levels on the address space.</li>
+</ul>
+<h2 id="conclusions">Conclusions</h2>
+<p>The segmentation and paging mechanism described in this paper is actually really close to the memory manage systems nowadays, for the idea that a system should allow sharable but controllable information referencing is still valuable in today&apos;s opinion and is widely applied in modern systems.</p>
+<p>Although the paging mechanism is quite naive, where only the virtual addresses, physical addresses and the valid tags are stored in an entry and no privilege checks will be performed in page level, the idea that the access levels should be specified by the supervisor and checked by the hardware is already used in the segmenation mechanism, which definitely inspired the design of the following memory management systems that are more complete in both software and hareware levels.</p>
+<p>Actually, the general ideas of the memory management system in this paper are quite complete even compared with the modern systems.</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/08/jos-lab2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -251,10 +348,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-10-08 23:00:41 / Modified: 23:01:17" itemprop="dateCreated datePublished" datetime="2022-10-08T23:00:41+08:00">2022-10-08</time>
+              <time title="Created: 2022-10-08 23:00:41" itemprop="dateCreated datePublished" datetime="2022-10-08T23:00:41+08:00">2022-10-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-14 16:46:07" itemprop="dateModified" datetime="2022-10-14T16:46:07+08:00">2022-10-14</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -277,15 +380,35 @@
 
       
           <h1 id="lab2-memory-management">LAB2, MEMORY MANAGEMENT</h1>
+<p>I finish these challenges:</p>
+<ul>
+<li>Use huge pages(4MB) to map the KERNBASE area to physical memories.</li>
+<li>Extend the JOS commands to display the mappings, edit the permissions of any mapping and dump the given virtual or physical address.</li>
+</ul>
 <h2 id="physical-page-management">Physical Page Management</h2>
+<p>The boot_alloc() allocates memories above KERNBASE in the virtual memory space before the paging system being set up. In the memory initialization function mem_init(), after the size of the physical memory is detected, boot_alloc() is used to allocate two pieces of space where a page for the kernel page directory and some contiguous pages for a bijection to the physical pages are tagged. The bijection is represented as an array of the instances of <code>struct PageInfo</code> with the length of the page number of the physical memory, where the <span class="math inline">\(i^{th}\)</span> of it maps to the <span class="math inline">\(i^{th}\)</span> physical page.</p>
+<p>After that, page_init() is called to initialized the bijection array. An <code>struct PageInfo</code> instance has a pointer field which points to another instance representing a free physical page if the instance is also represeting a free page, or it&apos;s null whether it represented an occupied page or it is just the end of the free list, so the free pages can be represented in a linked list(<code>struct PageInfo *page_free_list</code>). At the time when the page_init() is called, the physical memory usage status is as follows.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">+------------------+  &lt;- 0x08000000 (128MB)    &lt;-|-----------------       </span><br><span class="line">|                  |                             |</span><br><span class="line">/\/\/\/\/\/\/\/\/\/\                             |</span><br><span class="line">                                                 | free</span><br><span class="line">/\/\/\/\/\/\/\/\/\/\                             |</span><br><span class="line">|      Unused      |                             | </span><br><span class="line">|                  |                             |</span><br><span class="line">+------------------+  &lt;- 0x0015e000 (1MB+376KB)&lt;-|----------------</span><br><span class="line">|                  |                             | (in use)</span><br><span class="line">|                  |                             | PageInfo array</span><br><span class="line">| Extended Memory  |                             | One page for the page directory</span><br><span class="line">|                  |                             | Kernel file</span><br><span class="line">+------------------+  &lt;- 0x00100000 (1MB)      &lt;-|----------------</span><br><span class="line">|     BIOS ROM     |                             |</span><br><span class="line">+------------------+  &lt;- 0x000F0000 (960KB)      |</span><br><span class="line">|  16-bit devices, |                             | IO hole, in use</span><br><span class="line">|  expansion ROMs  |														 |</span><br><span class="line">+------------------+  &lt;- 0x000C0000 (768KB)      |   </span><br><span class="line">|   VGA Display    |                             |</span><br><span class="line">+------------------+  &lt;- 0x000A0000 (640KB)    &lt;-|-----------------   </span><br><span class="line">|                  |														 |</span><br><span class="line">|    Base Memory   |                             | free</span><br><span class="line">|                  |  &lt;- 0x00001000            &lt;-|-----------------   </span><br><span class="line">+------------------+  &lt;- 0x00000000            &lt;- Page 0, in use</span><br></pre></td></tr></table></figure>
+<p>Then it&apos;s easy to set up the array and the free list. The operation logic of page_alloc and page_free is quite simple, just pick the head node of the free list when allocating and add the node to be free to the head of the free list when freeing.</p>
 <h2 id="virtual-memory">Virtual Memory</h2>
 <h3 id="question-1.">Question 1.</h3>
-<p>Assuming that the following JOS kernel code is correct, what type should variable <code>x</code> have, <code>uintptr_t</code> or <code>physaddr_t</code>?</p>
+<p><em>Assuming that the following JOS kernel code is correct, what type should variable <code>x</code> have, <code>uintptr_t</code> or <code>physaddr_t</code>?</em></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">mystery_t</span> x;</span><br><span class="line"><span class="type">char</span>* value = return_a_pointer();</span><br><span class="line">*value = <span class="number">10</span>;</span><br><span class="line">x = (<span class="type">mystery_t</span>) value;</span><br></pre></td></tr></table></figure>
 <p><code>uintptr_t</code>, for the jos kernel has to access the memory through virtual address.</p>
+<h3 id="implement-the-paging-mechanism">Implement the Paging Mechanism</h3>
+<p>The pgdir_walk() looks for the page table entry given the virtual address and the page directory. If the page table hasn&apos;t been created, it will allocate a physical page for the page table if the parameter <code>create</code> is set to true or returns null otherwise.</p>
+<p>The boot_map_region() simply sets up the mapping between the given virtual address range and the physical address range by modifying the PTEs using pgdir_walk(). There is one thing that needs to pay attention to is that this function is only called to set up the <strong>static</strong> mappings at the boot time, so it won&apos;t increase the reference counter in the bijection structure.</p>
+<p>The page_lookup(), page_insert() and page_remove() are functions that will be called after the boot time, so the last two of them should modify the reference counter and invalidate the TLB if an entry(mapping) is removed or modified. One thing needed to concern about in the page_insert() is that, before checking whether the mapping has been existing or not, the reference counter of the given physical page should be increased, or it will lead to some troublesome problems if the page_remove() decreases the counter to 0!</p>
 <h2 id="kernel-address-space">Kernel Address Space</h2>
+<p>After the paging mechanism is implements, the mapping between the virtual memory space and the physical memory space should be set.</p>
 <h3 id="question-2.">Question 2.</h3>
+<p>page directory usage status</p>
 <table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 23%">
+<col style="width: 67%">
+</colgroup>
 <thead>
 <tr class="header">
 <th>Entry</th>
@@ -295,17 +418,67 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td>1023~960</td>
-<td>0xf~0xf0000000</td>
-<td></td>
+<td>960~1023</td>
+<td>0xf0000000~0xfffff000</td>
+<td>256 MB of physical address(though only 128 MB of it is valid)</td>
 </tr>
 <tr class="even">
-<td></td>
-<td></td>
-<td></td>
+<td>959</td>
+<td>0xefff8000(ULIM)</td>
+<td>The 32 KB kernel stack</td>
+</tr>
+<tr class="odd">
+<td>957</td>
+<td>0xef400000(UVPT)</td>
+<td>?? I don&apos;t know</td>
+</tr>
+<tr class="even">
+<td>956</td>
+<td>0xef000000(UPAGES)</td>
+<td>The <code>struct PageInfo</code> array</td>
 </tr>
 </tbody>
 </table>
+<h3 id="question-3.">Question 3.</h3>
+<p><em>We have placed the kernel and user environment in the same address space. Why will user programs not be able to read or write the kernel&apos;s memory? What specific mechanisms protect the kernel memory?</em></p>
+<p>The protection bits in the PDEs and the PTEs specify the protection levels of the mapping, which the MMU will check when it receives a memory accessing request. Thus a request from the user mode to access the kernel&apos;s memory which is set to supervisor protection level will fail the protection check by the MMU and thus raises an exception.</p>
+<h3 id="question-4.">Question 4.</h3>
+<p><em>What is the maximum amount of physical memory that this operating system can support? Why?</em></p>
+<p>128 MB, for the i386_detect_memory() has detected 0x8000 physical pages.</p>
+<h3 id="question-5.">Question 5.</h3>
+<p><em>How much space overhead is there for managing memory, if we actually had the maximum amount of physical memory? How is this overhead broken down?</em></p>
+<ul>
+<li>The <code>struct PageInfo</code> array costs 64 pages.</li>
+<li>The page directory costs 1 page.</li>
+<li>If all the page tables are in use, they will cost 1024 pages.</li>
+</ul>
+<p>So the maximum amount of physical memories used to manage memory is <span class="math inline">\(64+1+1024=1089\)</span> pages, that is 4356 KB or 4.25 MB. However, as the two-level paging system is implemented, only the page table is needed to record at least one mapping will it be allocated in the physical memory. For now, there are only 67 page tables in use as the <code>info pg</code> shows, that means there are only 528 KB memory used to memory management.</p>
+<h3 id="question-6.">Question 6.</h3>
+<p><em>Revisit the page table setup in <code>kern/entry.S</code> and <code>kern/entrypgdir.c</code>. Immediately after we turn on paging, EIP is still a low number (a little over 1MB). At what point do we transition to running at an EIP above KERNBASE? What makes it possible for us to continue executing at a low EIP between when we enable paging and when we begin running at an EIP above KERNBASE? Why is this transition necessary?</em></p>
+<p>After the instructions:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov	$relocated, %eax</span><br><span class="line">jmp	*%eax</span><br></pre></td></tr></table></figure>
+<p>The entry_pgdir points to a page directory which is manually set in the <code>kern/entrypgdir.c</code> maps virtual addresses in [0, 4MB) and [KERNBASE, KERNBASE + 4MB) to physical addresses [0, 4MB) and is loaded to cr3 register before the paging mode is on, so after the paging is enabled the program will execute at a low EIP that is interpreted as a virtual memory. Since the mapping between [0, 4MB) and [0, 4MB) is set, the program is still able to excecute at a low EIP before the jmp instruction change the EIP above KERNBASE, otherwise the MMU can&apos;t interpret the request below 4MB. This is why this transition is necessary.</p>
+<h2 id="challenge-huge-pages">Challenge: Huge Pages</h2>
+<p>According to the intel manuals, after the PTE_PS bit in the PDE is enabled, the MMU will interpret this PDE as an direct index towards a 4MB contiguous area in the physical memory instead of indexing the page table if the PSE bit in cr4 register is enabled.</p>
+<p>So I implement function boot_map_region_big_page() in <code>kern/pmap.c</code> for the KERNBASE mapping, which will set the mappings in the page directory and enable the PTE_PS bit in the PDEs. After the huge pages mappings are set up and before the address of the page directory being loaded into the cr3 register, the PSE bit in cr4 is enabled. These enable the huge page mode and set up the mappings.</p>
+<p>The setting up of the huge page mode will fail the check about the KERNBASE area, for the check_va2pa() function can&apos;t interpret the huge pages correctly, so it is also modified to translate the huge pages.</p>
+<h2 id="challenge-debug-commands">Challenge: Debug Commands</h2>
+<ul>
+<li>Command that shows mappings: <code>sm &lt;vm_left&gt; &lt;optional: vm_right&gt;/&lt;optional: +page_offset&gt; &lt;optional: r&gt;(round down to page size)</code></li>
+</ul>
+<p>This command will display the mappings of the given virtual address, it can interpret the huge pages correctly.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">K&gt; sm 0xffffa000 +3 # 3 more mappings</span><br><span class="line">VA:0xffffa000        PA:0x0fffa000           W:1 U:0</span><br><span class="line">VA:0xffffb000        PA:0x0fffb000           W:1 U:0</span><br><span class="line">VA:0xffffc000        PA:0x0fffc000           W:1 U:0</span><br><span class="line">VA:0xffffd000        PA:0x0fffd000           W:1 U:0</span><br><span class="line">K&gt; sm 0xef3fffff 0xef400a00 r # specify the right boundary and round down to PGSIZE</span><br><span class="line">VA:0xef3ff000        PA:0x0051d000           W:0 U:1</span><br><span class="line">VA:0xef400000        PA:----------           W:- U:-</span><br></pre></td></tr></table></figure>
+<p>Just look into the PD to find the entry and display it.</p>
+<ul>
+<li>Command that modify the permissions of any given mapping:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">K&gt; spp</span><br><span class="line">usage: spp &lt;vm_addr&gt; &lt;mode&gt; &lt;permission1&gt; &lt;permission2&gt;...</span><br><span class="line">modes: clear, cover, add, delete</span><br><span class="line">K&gt; sm 0xf0000000</span><br><span class="line">VA:0xf0000000        PA:0x00000000           W:1 U:0</span><br><span class="line">K&gt; spp 0xf0000000 add U</span><br><span class="line">K&gt; sm 0xf0000000</span><br><span class="line">VA:0xf0000000        PA:0x00000000           W:1 U:1</span><br><span class="line">K&gt; spp 0xf0000000 clear</span><br><span class="line">K&gt; sm 0xf0000000</span><br><span class="line">VA:0xf0000000        PA:0x00000000           W:0 U:0</span><br><span class="line">K&gt; spp 0xf0000000 cover W</span><br><span class="line">K&gt; sm 0xf0000000</span><br><span class="line">VA:0xf0000000        PA:0x00000000           W:1 U:0</span><br><span class="line">K&gt; spp 0xf0000000 delete W</span><br><span class="line">K&gt; sm 0xf0000000</span><br><span class="line">VA:0xf0000000        PA:0x00000000           W:0 U:0</span><br></pre></td></tr></table></figure>
+<p>Just look into the PD to find the entry and modify it.</p>
+<ul>
+<li>Command that dumps a given virtual address or a physical address</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">K&gt; dump</span><br><span class="line">usage: dump &lt;-p/-v&gt; &lt;addr&gt; &lt;optional: +&lt;$byte_offset&gt;&gt; &lt;optinal: d&lt;$decode_range(1,2,4 or 8)&gt;&gt;</span><br><span class="line">K&gt; dump -v 0xf0000000 +3</span><br><span class="line">VA:0xf0000000        PA:0x00000000           Val:0x53</span><br><span class="line">VA:0xf0000001        PA:0x00000001           Val:0xff</span><br><span class="line">VA:0xf0000002        PA:0x00000002           Val:0x0</span><br><span class="line">VA:0xf0000003        PA:0x00000003           Val:0xf0</span><br><span class="line">K&gt; dump -p 0x0 +3</span><br><span class="line">PA:0x00000000        Val:0x53</span><br><span class="line">PA:0x00000001        Val:0xff</span><br><span class="line">PA:0x00000002        Val:0x0</span><br><span class="line">PA:0x00000003        Val:0xf0</span><br><span class="line">K&gt; dump -v 0xf7ffffff +1</span><br><span class="line">VA:0xf7ffffff        PA:0x07ffffff           Val:0x0</span><br><span class="line">VA:0xf8000000        PA:0x08000000           Val:PA out of range</span><br></pre></td></tr></table></figure>
+<p>For the physical address, just dereference it with PADDR, while for the virtual address, it is needed to find the associated PDE and PTE.</p>
 
       
     </div>
@@ -561,7 +734,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/08/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/02/THE%20Multiprogramming%20System/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/duck.jpeg">
@@ -575,7 +748,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/10/08/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
+            <a href="/2022/10/02/THE%20Multiprogramming%20System/" class="post-title-link" itemprop="url">Writeup for The Structure of the "THE"-Multiprogramming System</a>
         </h2>
 
         <div class="post-meta">
@@ -585,7 +758,23 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2022-10-08 18:00:30" itemprop="dateCreated datePublished" datetime="2022-10-08T18:00:30+08:00">2022-10-08</time>
+              <time title="Created: 2022-10-02 19:36:01" itemprop="dateCreated datePublished" datetime="2022-10-02T19:36:01+08:00">2022-10-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-18 16:53:59" itemprop="dateModified" datetime="2022-10-18T16:53:59+08:00">2022-10-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/operating-system/" itemprop="url" rel="index"><span itemprop="name">operating system</span></a>
+                </span>
             </span>
 
           
@@ -599,20 +788,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start">Quick Start</h2>
-<h3 id="create-a-new-post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+          <h1 id="writeup-for-the-structure-of-the-the-multiprogramming-system1968">Writeup for <em>The Structure of the &quot;THE&quot;-Multiprogramming System</em>(1968)</h1>
+<h2 id="what-is-this-paper-talking-about">What is this paper talking about?</h2>
+<p>This is a definition paper, as well as a progress report. In this paper, Dijkstra introduced the first operating system that enables multiple users to share one computer and its peripheral hardware devices. He made an illustration of the general structure of the system his team designed, which is abstract as six hierarchies, as well as some experiences of the philosophy of developing a complex system like this.</p>
+<h2 id="what-is-the-motivation">What is the motivation?</h2>
+<p>Before then, only one user could use a computer at the same time, i.e. one control flow of a program would progress continuously until its termination, which was inconvenient in different ways. Dijkstra tried to solve the problem, to design a multiprogramming system allowing multiple users to share the computer in the university.</p>
+<h2 id="general-ideas">General ideas</h2>
+<p>Dijkstra designed a hierarchical system to perform a abstraction of the resources, in which the lower hierarchy would hide and take care of the resources and manipulations below to provide abstract interfaces to the higher hierarchy. There are six hierarchies in total.</p>
+<ul>
+<li>Level 0: It provides the abstract of the sequential processes by handling and monopolizing the clock interrupt. It allocates the precessor and performs mutual synchronization among all the sequential processes. Thus, the actual processor is inmaterial beyond this hierarchy.</li>
+<li>Level 1: It provides the abstract of the segments, which map to the physical storage pages, core pages and drum pages, by handling the drum interrupt. Thus, processes in the higher hierarchy just need to record the identifiers of the segments instead of caring about where the pages are.</li>
+<li>Level 2: It provides the abstract of the message interpreter, which creates a virtual console for every process, through which the the conversations between any of the higher level process and the operator can be carried out.</li>
+<li>Level 3: It provides the abstract of processes associated with I/O, above which the actual peripherals are considered as the logical communication units working in the higher levels.</li>
+<li>Level 4: It provides the abstract of the independent-user programs, which was not implemented yet at that time.</li>
+<li>Level 5: The operator.</li>
+</ul>
+<p>Dijkstra also introduced the concept of semaphores in the appendix , the P&amp;V manipulations and indivisible actions, through which synchronization is performed.</p>
+<h2 id="benefits-over-the-sota">Benefits over the SOTA</h2>
+<p>This is the first multiprogramming system of course, so it reached the &quot;state of the art&quot; as soon as it was published, so I just talk about some of its benefits,</p>
+<p>First, the hierarchy structure provides a clear abstract of the relations of the recourses, the higher level just uses the interfaces the lower one provides, which clarifies and divides the responsibility of each level, as well as hides the complex work that the higher level doesn&apos;t need to care about.</p>
+<p>Second, the hierarchy structure eases the testing work greatly, for the &quot;relevant states&quot; would be messy and the possible amount would be enormous if all the processes handle all the work. In the hierarchy system, testing could be performed level by level, only after the lower level be completely tested will the next level be verified, and the number of relevant states in a single stage is so small that they can all be tested, as Dijkstra illustrated in the paper.</p>
+<p>Third, the hierarchy structure proved to be robust, and the cooperation between all the processes are harmonious thanks to the hierarchy structure. Dijkstra didn&apos;t mention about the details, but the general idea is that the hierarchical structure ensures the finite length of the &quot;call-path&quot; from the high level to the low level.</p>
+<h2 id="drawbacks-of-this-system">Drawbacks of this system</h2>
+<p>As the first multiprogramming system in the world, it has several drawbacks.</p>
+<ul>
+<li>It didn&apos;t provide an interface through which independent users can communicate with each other, as Dijkstra sayed that, they only share the configuation and a procedure library.</li>
+<li>The dispatch system is naive. As far as the paper illustrated in the appendix, the process awake after the V operation is undefined, which may causes something like hunger. This might be a potential problem.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>This paper contributed greatly to the development of the technology of computers, as it introduced the <strong>first</strong> multiprogamming system in the world. Although we might take many concepts in the paper for granted for they may be universal nowadays, the step from zero to one is never an easy thing to do. This paper provides the general idea of how the operating system dealing with multipramming, allocating and synchronizing the resources, which is worthwile reading even after more than 60 years. Also, the hierarchy structure and the design philosophy behind it, that we should construct and varify level by level, both inspire me.</p>
+<h2 id="referencesource">Reference(Source)</h2>
+<p>The Structure of the &quot;THE&quot;-Multiprogramming System, Edsger W. Dijkstra, Technological University, Eindhoven, The Netherlands</p>
 
       
     </div>
@@ -696,7 +902,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -709,7 +915,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

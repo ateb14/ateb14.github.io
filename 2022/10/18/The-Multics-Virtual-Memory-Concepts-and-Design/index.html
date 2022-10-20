@@ -20,17 +20,21 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="This is my blog recording what I&#39;ve learned.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yiyang Wang&#39;s Blog">
-<meta property="og:url" content="http://ateb14.github.io/categories/self-introduction/index.html">
+  <meta name="description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970) What is this paper talking about? This is a definition paper which talks about the design and implementation of the virtual memory mec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Writeup for The Multics Virtual Memory: Concepts and Design">
+<meta property="og:url" content="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/index.html">
 <meta property="og:site_name" content="Yiyang Wang&#39;s Blog">
-<meta property="og:description" content="This is my blog recording what I&#39;ve learned.">
+<meta property="og:description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970) What is this paper talking about? This is a definition paper which talks about the design and implementation of the virtual memory mec">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-10-18T01:46:28.000Z">
+<meta property="article:modified_time" content="2022-10-20T13:48:30.148Z">
 <meta property="article:author" content="Yiyang Wang">
+<meta property="article:tag" content="operating system">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://ateb14.github.io/categories/self-introduction/">
+<link rel="canonical" href="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/">
 
 
 <script id="page-configurations">
@@ -38,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Category: self-introduction | Yiyang Wang's Blog</title>
+  <title>Writeup for The Multics Virtual Memory: Concepts and Design | Yiyang Wang's Blog</title>
   
 
 
@@ -152,51 +156,119 @@
         <div class="content-wrap">
           
 
-          <div class="content category">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">self-introduction
-          <small>Category</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/duck.jpeg">
+      <meta itemprop="name" content="Yiyang Wang">
+      <meta itemprop="description" content="This is my blog recording what I've learned.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yiyang Wang's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Writeup for The Multics Virtual Memory: Concepts and Design
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-10-18 09:46:28" itemprop="dateCreated datePublished" datetime="2022-10-18T09:46:28+08:00">2022-10-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-10-20 21:48:30" itemprop="dateModified" datetime="2022-10-20T21:48:30+08:00">2022-10-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/operating-system/" itemprop="url" rel="index"><span itemprop="name">operating system</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2022</span>
+        <h1 id="writeup-for-the-multics-virtual-memory-concepts-and-design1970">Writeup for <em>The Multics Virtual Memory: Concepts and Design(1970)</em></h1>
+<h2 id="what-is-this-paper-talking-about">What is this paper talking about?</h2>
+<p>This is a definition paper which talks about the design and implementation of the virtual memory mechanism in Multics(Multiplexed Information and Computing Service). The Multics system is a segmented system where equal-size pages compose of every segment and segments are packages of information that are directly addressed and have a set of access attributes that are checked by hardware whenever they are referenced by any user. Each segment owns <strong>at most</strong> a page table and each process is able to know about and connect to several segments</p>
+<h2 id="what-is-the-motivation">What is the motivation?</h2>
+<p>Previous systems that used only paging, only segementaion or the combination of both wern&apos;t able to meet the requirements to support the <strong>rapid</strong> but <strong>controlled</strong> sharing of information stored on-line, which requires not only the software design but also the hardware support. Aiming at solving this problem, the Multics system provides a segmentation and paging mechanism that satisfies two design goals:</p>
+<ul>
+<li>All on-line information, i.e. information stored in the core memory, is addressed directly by a processor and hence referenced directly by any user. (rapid, shared)</li>
+<li>All the references to all on-line information are under control according to their and the information&apos;s privilege levels. (controlled)</li>
+</ul>
+<h2 id="benefits-over-the-state-of-the-art">Benefits over the &quot;state-of-the-art&quot;</h2>
+<ul>
+<li>All on-line information can be referenced directly by any user as long as it passes the privilege check. Information is both sharable and controllable in the Multics system compared with the previous systems.</li>
+<li>The segmentation abstract is fully managed by the supervisor and the number of the segment descriptors is sufficiently large enough, so the Multics user doesn&apos;t have to manage the segment descriptors and it can just directly operate on the original information that retains its identity and attributes instead of the copies of the information.</li>
+<li>The combination of the paging and segmentation mechanism makes it needless to store all the information of a segment on the core memory for only the needed pages will reside in the memory, which allows a segment to be large enough compared to the size of a page.</li>
+<li>The policy applied in the Multics system that tries to only keep the segments in use be active, only keep the pages in use in the core memory and make a process know about the segments only when they are needed by this process fully exploits the physical memory.</li>
+</ul>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li>The privilege checks are only performed on the segmentation level, i.e. the page table entries don&apos;t specify the access levels, which makes it not flexible enough to manage the access levels on the address space.</li>
+</ul>
+<h2 id="conclusions">Conclusions</h2>
+<p>The segmentation and paging mechanism described in this paper is actually really close to the memory manage systems nowadays, for the idea that a system should allow sharable but controllable information referencing is still valuable in today&apos;s opinion and is widely applied in modern systems.</p>
+<p>Although the paging mechanism is quite naive, where only the virtual addresses, physical addresses and the valid tags are stored in an entry and no privilege checks will be performed in page level, the idea that the access levels should be specified by the supervisor and checked by the hardware is already used in the segmenation mechanism, which definitely inspired the design of the following memory management systems that are more complete in both software and hareware levels.</p>
+<p>Actually, the general ideas of the memory management system in this paper are quite complete even compared with the modern systems.</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2022-10-08T21:54:55+08:00"
-              content="2022-10-08">
-          10-08
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2022/10/08/introduction/" itemprop="url">
-            <span itemprop="name">Introduction</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/10/08/jos-lab2/" rel="prev" title="jos-lab2">
+      <i class="fa fa-chevron-left"></i> jos-lab2
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -249,6 +321,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#writeup-for-the-multics-virtual-memory-concepts-and-design1970"><span class="nav-number">1.</span> <span class="nav-text">Writeup for The Multics Virtual Memory: Concepts and Design(1970)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benefits-over-the-state-of-the-art"><span class="nav-number">1.3.</span> <span class="nav-text">Benefits over the &quot;state-of-the-art&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drawbacks"><span class="nav-number">1.4.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusions"><span class="nav-number">1.5.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -264,7 +337,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -277,7 +350,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
