@@ -2,6 +2,7 @@
 title: Introduction
 date: 2022-10-08 21:54:55
 tags:
+categories: self-introduction
 top: 1
 ---
 
