@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970)What is this paper talking about?This is a definition paper which talks about the design and implementation of the virtual memory mecha">
+  <meta name="description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970) What is this paper talking about? This is a definition paper which talks about the design and implementation of the virtual memory mec">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Writeup for The Multics Virtual Memory: Concepts and Design">
 <meta property="og:url" content="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/index.html">
 <meta property="og:site_name" content="Yiyang Wang&#39;s Blog">
-<meta property="og:description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970)What is this paper talking about?This is a definition paper which talks about the design and implementation of the virtual memory mecha">
+<meta property="og:description" content="Writeup for The Multics Virtual Memory: Concepts and Design(1970) What is this paper talking about? This is a definition paper which talks about the design and implementation of the virtual memory mec">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-10-18T01:46:28.000Z">
 <meta property="article:modified_time" content="2022-10-20T13:48:30.148Z">
 <meta property="article:author" content="Yiyang Wang">
-<meta property="article:tag" content="operating system">
 <meta property="article:tag" content="paper reading">
+<meta property="article:tag" content="operating system">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/">
@@ -166,7 +166,7 @@
     <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2022/10/18/The-Multics-Virtual-Memory-Concepts-and-Design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/duck.jpeg">
+      <meta itemprop="image" content="/images/wyy.jpeg">
       <meta itemprop="name" content="Yiyang Wang">
       <meta itemprop="description" content="This is my blog recording what I've learned.">
     </span>
@@ -216,24 +216,78 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Writeup-for-The-Multics-Virtual-Memory-Concepts-and-Design-1970"><a href="#Writeup-for-The-Multics-Virtual-Memory-Concepts-and-Design-1970" class="headerlink" title="Writeup for The Multics Virtual Memory: Concepts and Design(1970)"></a>Writeup for <em>The Multics Virtual Memory: Concepts and Design(1970)</em></h1><h2 id="What-is-this-paper-talking-about"><a href="#What-is-this-paper-talking-about" class="headerlink" title="What is this paper talking about?"></a>What is this paper talking about?</h2><p>This is a definition paper which talks about the design and implementation of the virtual memory mechanism in Multics(Multiplexed Information and Computing Service). The Multics system is a segmented system where equal-size pages compose of every segment and segments are packages of information that are directly addressed and have a set of  access attributes that are checked by hardware whenever they are referenced by any user. Each segment owns <strong>at most</strong> a page table and each process is able to know about and connect to several segments</p>
-<h2 id="What-is-the-motivation"><a href="#What-is-the-motivation" class="headerlink" title="What is the motivation?"></a>What is the motivation?</h2><p>Previous systems that used only paging, only segementaion or the combination of both wern&#x2019;t able to meet the requirements to support the <strong>rapid</strong> but <strong>controlled</strong> sharing of information stored on-line, which requires not only the software design but also the hardware support. Aiming at solving this problem, the Multics system provides a segmentation and paging mechanism that satisfies two design goals:</p>
+        <h1 id="writeup-for-the-multics-virtual-memory-concepts-and-design1970">Writeup
+for <em>The Multics Virtual Memory: Concepts and Design(1970)</em></h1>
+<h2 id="what-is-this-paper-talking-about">What is this paper talking
+about?</h2>
+<p>This is a definition paper which talks about the design and
+implementation of the virtual memory mechanism in Multics(Multiplexed
+Information and Computing Service). The Multics system is a segmented
+system where equal-size pages compose of every segment and segments are
+packages of information that are directly addressed and have a set of
+access attributes that are checked by hardware whenever they are
+referenced by any user. Each segment owns <strong>at most</strong> a
+page table and each process is able to know about and connect to several
+segments</p>
+<h2 id="what-is-the-motivation">What is the motivation?</h2>
+<p>Previous systems that used only paging, only segementaion or the
+combination of both wern&apos;t able to meet the requirements to support the
+<strong>rapid</strong> but <strong>controlled</strong> sharing of
+information stored on-line, which requires not only the software design
+but also the hardware support. Aiming at solving this problem, the
+Multics system provides a segmentation and paging mechanism that
+satisfies two design goals:</p>
 <ul>
-<li>All on-line information, i.e. information stored in the core memory, is addressed directly by a processor and hence referenced directly by any  user. (rapid, shared)</li>
-<li>All the references to all on-line information are under control according to their and the information&#x2019;s privilege levels. (controlled)</li>
+<li>All on-line information, i.e. information stored in the core memory,
+is addressed directly by a processor and hence referenced directly by
+any user. (rapid, shared)</li>
+<li>All the references to all on-line information are under control
+according to their and the information&apos;s privilege levels.
+(controlled)</li>
 </ul>
-<h2 id="Benefits-over-the-&#x201C;state-of-the-art&#x201D;"><a href="#Benefits-over-the-&#x201C;state-of-the-art&#x201D;" class="headerlink" title="Benefits over the &#x201C;state-of-the-art&#x201D;"></a>Benefits over the &#x201C;state-of-the-art&#x201D;</h2><ul>
-<li>All on-line information can be referenced directly by any user as long as it passes the privilege check. Information is both sharable and controllable in the Multics system compared with the previous systems.</li>
-<li>The segmentation abstract is fully managed by the supervisor and the number of the segment descriptors is sufficiently large enough, so the Multics user doesn&#x2019;t have to manage the segment descriptors and it can just directly operate on the original information that retains its identity and attributes instead of the copies of the information.</li>
-<li>The combination of the paging and segmentation mechanism makes it needless to store all the information of a segment on the core memory for only the needed pages will reside in the memory, which allows a segment to be large enough compared to the size of a page.</li>
-<li>The policy applied in the Multics system that tries to only keep the segments in use be active, only keep the pages in use in the core memory and make a process know about the segments only when they are needed by this process fully exploits the physical memory.</li>
+<h2 id="benefits-over-the-state-of-the-art">Benefits over the
+&quot;state-of-the-art&quot;</h2>
+<ul>
+<li>All on-line information can be referenced directly by any user as
+long as it passes the privilege check. Information is both sharable and
+controllable in the Multics system compared with the previous
+systems.</li>
+<li>The segmentation abstract is fully managed by the supervisor and the
+number of the segment descriptors is sufficiently large enough, so the
+Multics user doesn&apos;t have to manage the segment descriptors and it can
+just directly operate on the original information that retains its
+identity and attributes instead of the copies of the information.</li>
+<li>The combination of the paging and segmentation mechanism makes it
+needless to store all the information of a segment on the core memory
+for only the needed pages will reside in the memory, which allows a
+segment to be large enough compared to the size of a page.</li>
+<li>The policy applied in the Multics system that tries to only keep the
+segments in use be active, only keep the pages in use in the core memory
+and make a process know about the segments only when they are needed by
+this process fully exploits the physical memory.</li>
 </ul>
-<h2 id="Drawbacks"><a href="#Drawbacks" class="headerlink" title="Drawbacks"></a>Drawbacks</h2><ul>
-<li>The privilege checks are only performed on the segmentation level, i.e. the page table entries don&#x2019;t specify the access levels, which makes it not flexible enough to manage the access levels on the address space.</li>
+<h2 id="drawbacks">Drawbacks</h2>
+<ul>
+<li>The privilege checks are only performed on the segmentation level,
+i.e. the page table entries don&apos;t specify the access levels, which makes
+it not flexible enough to manage the access levels on the address
+space.</li>
 </ul>
-<h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><p>The segmentation and paging mechanism described in this paper is actually really close to the memory manage systems nowadays, for the idea that a system should allow sharable but controllable information referencing is still valuable in today&#x2019;s opinion and is widely applied in modern systems. </p>
-<p>Although the paging mechanism is quite naive, where only the virtual addresses, physical addresses and the valid tags are stored in an entry and no privilege checks will be performed in page level, the idea that the access levels should be specified by the supervisor and checked by the hardware is already used in the segmenation mechanism, which definitely inspired the design of the following memory management systems that are more complete in both software and hareware levels.</p>
-<p>Actually, the general ideas of the memory management system in this paper are quite complete even compared with the modern systems.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>The segmentation and paging mechanism described in this paper is
+actually really close to the memory manage systems nowadays, for the
+idea that a system should allow sharable but controllable information
+referencing is still valuable in today&apos;s opinion and is widely applied
+in modern systems.</p>
+<p>Although the paging mechanism is quite naive, where only the virtual
+addresses, physical addresses and the valid tags are stored in an entry
+and no privilege checks will be performed in page level, the idea that
+the access levels should be specified by the supervisor and checked by
+the hardware is already used in the segmenation mechanism, which
+definitely inspired the design of the following memory management
+systems that are more complete in both software and hareware levels.</p>
+<p>Actually, the general ideas of the memory management system in this
+paper are quite complete even compared with the modern systems.</p>
 
     </div>
 
@@ -243,8 +297,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/operating-system/" rel="tag"># operating system</a>
               <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
+              <a href="/tags/operating-system/" rel="tag"># operating system</a>
           </div>
 
         
@@ -318,14 +372,17 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Writeup-for-The-Multics-Virtual-Memory-Concepts-and-Design-1970"><span class="nav-number">1.</span> <span class="nav-text">Writeup for The Multics Virtual Memory: Concepts and Design(1970)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefits-over-the-%E2%80%9Cstate-of-the-art%E2%80%9D"><span class="nav-number">1.3.</span> <span class="nav-text">Benefits over the “state-of-the-art”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Drawbacks"><span class="nav-number">1.4.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusions"><span class="nav-number">1.5.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#writeup-for-the-multics-virtual-memory-concepts-and-design1970"><span class="nav-number">1.</span> <span class="nav-text">Writeup
+for The Multics Virtual Memory: Concepts and Design(1970)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking
+about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benefits-over-the-state-of-the-art"><span class="nav-number">1.3.</span> <span class="nav-text">Benefits over the
+&quot;state-of-the-art&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drawbacks"><span class="nav-number">1.4.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusions"><span class="nav-number">1.5.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="Yiyang Wang"
-      src="/images/duck.jpeg">
+      src="/images/wyy.jpeg">
   <p class="site-author-name" itemprop="name">Yiyang Wang</p>
   <div class="site-description" itemprop="description">This is my blog recording what I've learned.</div>
 </div>
