@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Notes for Linear AlgebraIntroductionIt&amp;#x2019;s been two years since I took my linear algebra in my freshman year, and the relevant knowledge I used in the past few semesters are so limited that I for">
+  <meta name="description" content="Notes for Linear Algebra Introduction It&amp;apos;s been two years since I took my linear algebra in my freshman year, and the relevant knowledge I used in the past few semesters are so limited that I for">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linear Algebra Note">
 <meta property="og:url" content="http://ateb14.github.io/2023/02/18/Linear-Algebra-Note/index.html">
 <meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
-<meta property="og:description" content="Notes for Linear AlgebraIntroductionIt&amp;#x2019;s been two years since I took my linear algebra in my freshman year, and the relevant knowledge I used in the past few semesters are so limited that I for">
+<meta property="og:description" content="Notes for Linear Algebra Introduction It&amp;apos;s been two years since I took my linear algebra in my freshman year, and the relevant knowledge I used in the past few semesters are so limited that I for">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-02-18T09:56:22.000Z">
 <meta property="article:modified_time" content="2023-02-19T15:09:31.469Z">
@@ -216,27 +216,101 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Notes-for-Linear-Algebra"><a href="#Notes-for-Linear-Algebra" class="headerlink" title="Notes for Linear Algebra"></a>Notes for Linear Algebra</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>It&#x2019;s been two years since I took my linear algebra in my freshman year, and the relevant knowledge I used in the past few semesters are so limited that I forget more than half of them. For now, I decide to read <em>introduction to linear algebra</em> by Gilbert Strang in order to recall the concepts of algebra and also try to think from the perspective which is somehow different from what I did in the first year.</p>
-<h2 id="LU-factorization"><a href="#LU-factorization" class="headerlink" title="LU factorization"></a>LU factorization</h2><p>We can factorize an invertible square matrix $A$ into two triangular matrices $L,U$, where $U$ is an upper triangular matrix with pivots on its diagonal, and $L$ is a lower triangular matrix with $L_{i,j}$  exactly equal to the multiplier that multiplied the pivot row $j$ when it was subtracted from row $i$ in elimination to solve $Ax = b$.<br>$$<br>A = LU<br>$$<br>$L $ stands for the forward elimination step turning $A$ into an upper triangular matrix:<br>$$<br>LUx = b \Rightarrow Ux = L^{-1}b=c \Rightarrow Lc = b<br>$$<br>$U$ stands for the backward substitution that gives the final answer after we solve $c$ From $Lc = b$:<br>$$<br>Ux = c<br>$$<br>For example, when $A = \left[ \begin{matrix} 1&amp;2\4&amp;9 \end{matrix} \right], b = [5,21]^{T}$, $L = \left[\begin{matrix} 1&amp;0\4&amp;1 \end{matrix}\right], U = \left[\begin{matrix} 1&amp;2\0&amp;1 \end{matrix}\right]$, for we turn $Ax=b$ into $x+2y=5,y=1$,which can also be written in the format: $Ux = c$  that yields $U$,  using the forward elimination that yields $L$. In all, the whole process to solve $Ax=b$ using LU factorization can be denoted as:<br>$$<br>L \Rightarrow (c,U) \Rightarrow x<br>$$</p>
-<p>The diagonal of $L$ comprises all 1&#x2019;s, but $U$ probably doesn&#x2019;t. We can further factorize $A$ into $LDU$ by scaling all the pivots of $U$ into one, where D is a diagonal matrix containing the pivots of the previous $U$&#xFF08;$A$).</p>
-<p>It&#x2019;s noteworthy that when $A^{T} = A$, $A = LDU = LDL^T$, which will save almost half of the time and space to solve $Ax=b$.</p>
-<h2 id="Projections"><a href="#Projections" class="headerlink" title="Projections"></a>Projections</h2><p>We have $n$ vectors $a_1,&#x2026;,a_n$ in $R^m$ that are linearly independent and a vector $b \in R^m$. Find the vector $p=A\hat{x}$ in the column space of $A = &lt;a_n,&#x2026;,a_n&gt;$  which is closest to $b$ and the projection matrix $P$ which statisfies $p = Pb$.</p>
+        <h1 id="notes-for-linear-algebra">Notes for Linear Algebra</h1>
+<h2 id="introduction">Introduction</h2>
+<p>It&apos;s been two years since I took my linear algebra in my freshman
+year, and the relevant knowledge I used in the past few semesters are so
+limited that I forget more than half of them. For now, I decide to read
+<em>introduction to linear algebra</em> by Gilbert Strang in order to
+recall the concepts of algebra and also try to think from the
+perspective which is somehow different from what I did in the first
+year.</p>
+<h2 id="lu-factorization">LU factorization</h2>
+<p>We can factorize an invertible square matrix <span class="math inline">\(A\)</span> into two triangular matrices <span class="math inline">\(L,U\)</span>, where <span class="math inline">\(U\)</span> is an upper triangular matrix with
+pivots on its diagonal, and <span class="math inline">\(L\)</span> is a
+lower triangular matrix with <span class="math inline">\(L_{i,j}\)</span> exactly equal to the multiplier
+that multiplied the pivot row <span class="math inline">\(j\)</span>
+when it was subtracted from row <span class="math inline">\(i\)</span>
+in elimination to solve <span class="math inline">\(Ax = b\)</span>.
+<span class="math display">\[
+A = LU
+\]</span> $L $ stands for the forward elimination step turning <span class="math inline">\(A\)</span> into an upper triangular matrix: <span class="math display">\[
+LUx = b \Rightarrow Ux = L^{-1}b=c \Rightarrow Lc = b
+\]</span> <span class="math inline">\(U\)</span> stands for the backward
+substitution that gives the final answer after we solve <span class="math inline">\(c\)</span> From <span class="math inline">\(Lc =
+b\)</span>: <span class="math display">\[
+Ux = c
+\]</span> For example, when <span class="math inline">\(A = \left[
+\begin{matrix} 1&amp;2\\4&amp;9 \end{matrix} \right], b =
+[5,21]^{T}\)</span>, <span class="math inline">\(L =
+\left[\begin{matrix} 1&amp;0\\4&amp;1 \end{matrix}\right], U =
+\left[\begin{matrix} 1&amp;2\\0&amp;1 \end{matrix}\right]\)</span>, for
+we turn <span class="math inline">\(Ax=b\)</span> into <span class="math inline">\(x+2y=5,y=1\)</span>,which can also be written in
+the format: <span class="math inline">\(Ux = c\)</span> that yields
+<span class="math inline">\(U\)</span>, using the forward elimination
+that yields <span class="math inline">\(L\)</span>. In all, the whole
+process to solve <span class="math inline">\(Ax=b\)</span> using LU
+factorization can be denoted as: <span class="math display">\[
+L \Rightarrow (c,U) \Rightarrow x
+\]</span></p>
+<p>The diagonal of <span class="math inline">\(L\)</span> comprises all
+1&apos;s, but <span class="math inline">\(U\)</span> probably doesn&apos;t. We can
+further factorize <span class="math inline">\(A\)</span> into <span class="math inline">\(LDU\)</span> by scaling all the pivots of <span class="math inline">\(U\)</span> into one, where D is a diagonal matrix
+containing the pivots of the previous <span class="math inline">\(U\)</span>&#xFF08;<span class="math inline">\(A\)</span>).</p>
+<p>It&apos;s noteworthy that when <span class="math inline">\(A^{T} =
+A\)</span>, <span class="math inline">\(A = LDU = LDL^T\)</span>, which
+will save almost half of the time and space to solve <span class="math inline">\(Ax=b\)</span>.</p>
+<h2 id="projections">Projections</h2>
+<p>We have <span class="math inline">\(n\)</span> vectors <span class="math inline">\(a_1,...,a_n\)</span> in <span class="math inline">\(R^m\)</span> that are linearly independent and a
+vector <span class="math inline">\(b \in R^m\)</span>. Find the vector
+<span class="math inline">\(p=A\hat{x}\)</span> in the column space of
+<span class="math inline">\(A = &lt;a_n,...,a_n&gt;\)</span> which is
+closest to <span class="math inline">\(b\)</span> and the projection
+matrix <span class="math inline">\(P\)</span> which statisfies <span class="math inline">\(p = Pb\)</span>.</p>
 <ul>
-<li>Subspace: $C(A)$</li>
-<li>The error vector $b - A\hat{x}$ is perpendicular to this column space</li>
-<li>Consequently $b-A\hat{x}$ is in the nullspace of $A^T$, which means that $A^T(b-A\hat{x}) = 0$</li>
+<li>Subspace: <span class="math inline">\(C(A)\)</span></li>
+<li>The error vector <span class="math inline">\(b - A\hat{x}\)</span>
+is perpendicular to this column space</li>
+<li>Consequently <span class="math inline">\(b-A\hat{x}\)</span> is in
+the nullspace of <span class="math inline">\(A^T\)</span>, which means
+that <span class="math inline">\(A^T(b-A\hat{x}) = 0\)</span></li>
 </ul>
-<p>Therefore, $p = A\hat{x} = A(A^TA)^{-1}A^Tb \Rightarrow P = A(A^TA)^{-1}A^T$.</p>
-<p>We have $P^2 = P$ for the second projection won&#x2019;t change the first projection.</p>
-<p>It&#x2019;s noteworthy that $A^TA$ is invertible if and only if $A$ has linearly independent columns and we can prove it by proving that the nullspace of $A$ is exactly that of $A^TA$.</p>
-<h2 id="QR-factorization"><a href="#QR-factorization" class="headerlink" title="QR factorization"></a>QR factorization</h2><p>$A = QR$, where the columns of $A$ are linearly independent and $Q$ is an orthonormal matrix that comes from the Gram-Schmidt method(calculating the orthogonal bases by subtracting the projections on previous bases), i.e. $Q^TQ = I$. Therefore, $R = Q^TA$, and $q_{i}$ is orthogonal to $a_1,&#x2026;,a_{i-1}$, which means that $R$ is an upper triangular matrix.</p>
-<h2 id="Diagonalization-in-Differential-Equation"><a href="#Diagonalization-in-Differential-Equation" class="headerlink" title="Diagonalization in Differential Equation"></a>Diagonalization in Differential Equation</h2><p>We try to solve this <strong>constant-coefficient</strong> differential equation starting from $\bold{u}(0)$:<br>$$<br>\frac{d\bold{u}}{dt} = A\bold{u}<br>$$<br>If $Ax = \lambda x$, we get $\frac{d\bold{u}}{dt} = \lambda \bold{u}$ when $\bold{u} = e^{\lambda t}\bold{x}$.</p>
-<p>When $A$ is diagonalizable, the complete solution is $\bold{u(t)} = \sum_{i=1}^{i=n}c_ie^{\lambda_{i t}}\bold{x_i}$.</p>
-<p>Even when there is a shortage of eigenvectors, we can let $\bold{u} = e^{At}\bold{u}(0)$.</p>
+<p>Therefore, <span class="math inline">\(p = A\hat{x} =
+A(A^TA)^{-1}A^Tb \Rightarrow P = A(A^TA)^{-1}A^T\)</span>.</p>
+<p>We have <span class="math inline">\(P^2 = P\)</span> for the second
+projection won&apos;t change the first projection.</p>
+<p>It&apos;s noteworthy that <span class="math inline">\(A^TA\)</span> is
+invertible if and only if <span class="math inline">\(A\)</span> has
+linearly independent columns and we can prove it by proving that the
+nullspace of <span class="math inline">\(A\)</span> is exactly that of
+<span class="math inline">\(A^TA\)</span>.</p>
+<h2 id="qr-factorization">QR factorization</h2>
+<p><span class="math inline">\(A = QR\)</span>, where the columns of
+<span class="math inline">\(A\)</span> are linearly independent and
+<span class="math inline">\(Q\)</span> is an orthonormal matrix that
+comes from the Gram-Schmidt method(calculating the orthogonal bases by
+subtracting the projections on previous bases), i.e. <span class="math inline">\(Q^TQ = I\)</span>. Therefore, <span class="math inline">\(R = Q^TA\)</span>, and <span class="math inline">\(q_{i}\)</span> is orthogonal to <span class="math inline">\(a_1,...,a_{i-1}\)</span>, which means that <span class="math inline">\(R\)</span> is an upper triangular matrix.</p>
+<h2 id="diagonalization-in-differential-equation">Diagonalization in
+Differential Equation</h2>
+<p>We try to solve this <strong>constant-coefficient</strong>
+differential equation starting from <span class="math inline">\(\bold{u}(0)\)</span>: <span class="math display">\[
+\frac{d\bold{u}}{dt} = A\bold{u}
+\]</span> If <span class="math inline">\(Ax = \lambda x\)</span>, we get
+<span class="math inline">\(\frac{d\bold{u}}{dt} = \lambda
+\bold{u}\)</span> when <span class="math inline">\(\bold{u} = e^{\lambda
+t}\bold{x}\)</span>.</p>
+<p>When <span class="math inline">\(A\)</span> is diagonalizable, the
+complete solution is <span class="math inline">\(\bold{u(t)} =
+\sum_{i=1}^{i=n}c_ie^{\lambda_{i t}}\bold{x_i}\)</span>.</p>
+<p>Even when there is a shortage of eigenvectors, we can let <span class="math inline">\(\bold{u} = e^{At}\bold{u}(0)\)</span>.</p>
 <ul>
-<li>$e^{At} = I + At + \frac{1}{2}(At)^2&#x2026;$</li>
-<li>$\frac{de^{At}}{dt} = Ae^{At}$</li>
-<li>Eigenvalues are $e^{\lambda t}$ for $e^{At}x = (1+\lambda t+&#x2026;)x$</li>
+<li><span class="math inline">\(e^{At} = I + At +
+\frac{1}{2}(At)^2...\)</span></li>
+<li><span class="math inline">\(\frac{de^{At}}{dt} =
+Ae^{At}\)</span></li>
+<li>Eigenvalues are <span class="math inline">\(e^{\lambda t}\)</span>
+for <span class="math inline">\(e^{At}x = (1+\lambda
+t+...)x\)</span></li>
 </ul>
 
     </div>
@@ -260,7 +334,10 @@
     <a href="/2023/01/23/Dynamic-Reachability-Algorithm/" rel="prev" title="A Dynamic Reachability Algorithm">
       <i class="fa fa-chevron-left"></i> A Dynamic Reachability Algorithm
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/" rel="next" title="Foundation of Generative Models">
+      Foundation of Generative Models <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -319,7 +396,8 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Notes-for-Linear-Algebra"><span class="nav-number">1.</span> <span class="nav-text">Notes for Linear Algebra</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LU-factorization"><span class="nav-number">1.2.</span> <span class="nav-text">LU factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Projections"><span class="nav-number">1.3.</span> <span class="nav-text">Projections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QR-factorization"><span class="nav-number">1.4.</span> <span class="nav-text">QR factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Diagonalization-in-Differential-Equation"><span class="nav-number">1.5.</span> <span class="nav-text">Diagonalization in Differential Equation</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#notes-for-linear-algebra"><span class="nav-number">1.</span> <span class="nav-text">Notes for Linear Algebra</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lu-factorization"><span class="nav-number">1.2.</span> <span class="nav-text">LU factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#projections"><span class="nav-number">1.3.</span> <span class="nav-text">Projections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qr-factorization"><span class="nav-number">1.4.</span> <span class="nav-text">QR factorization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#diagonalization-in-differential-equation"><span class="nav-number">1.5.</span> <span class="nav-text">Diagonalization in
+Differential Equation</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -335,20 +413,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

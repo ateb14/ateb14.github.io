@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Foundation of Generative Models Definition Given observational data sampled from the true distribution \(p(x)\), denoted as \(x \sim p(x)\), training (parameter estimation) can be conducted to obtain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Foundation of Generative Models">
+<meta property="og:url" content="http://ateb14.github.io/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/index.html">
+<meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
+<meta property="og:description" content="Foundation of Generative Models Definition Given observational data sampled from the true distribution \(p(x)\), denoted as \(x \sim p(x)\), training (parameter estimation) can be conducted to obtain">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://ateb14.github.io/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/Untitled.png">
+<meta property="article:published_time" content="2023-06-06T17:48:22.000Z">
+<meta property="article:modified_time" content="2023-06-06T17:49:34.398Z">
+<meta property="article:author" content="WANG YIYANG">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Generative Models">
+<meta property="article:tag" content="Mathematics">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ateb14.github.io/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/Untitled.png">
+
+<link rel="canonical" href="http://ateb14.github.io/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Foundation of Generative Models | WANG YIYANG's BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">WANG YIYANG's BLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello there!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/wyy.jpeg">
+      <meta itemprop="name" content="WANG YIYANG">
+      <meta itemprop="description" content="A junior student from the School of EECS, Peking University.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WANG YIYANG's BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Foundation of Generative Models
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-07 01:48:22 / Modified: 01:49:34" itemprop="dateCreated datePublished" datetime="2023-06-07T01:48:22+08:00">2023-06-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Generative-Models/" itemprop="url" rel="index"><span itemprop="name">Generative Models</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="foundation-of-generative-models">Foundation of Generative
+Models</h1>
+<h1 id="definition">Definition</h1>
+<p>Given observational data sampled from the true distribution <span class="math inline">\(p(x)\)</span>, denoted as <span class="math inline">\(x \sim p(x)\)</span>, training (parameter
+estimation) can be conducted to obtain a generative model <span class="math inline">\(p_{\theta}(x)\)</span> controlled by <span class="math inline">\(\theta\)</span> that approximates the true
+distribution.</p>
+<h1 id="difficulties">Difficulties</h1>
+<p>Generally speaking, we cannot directly sample <span class="math inline">\(x\)</span> from <span class="math inline">\(p_{\theta}(x)\)</span>, but it is easy to sample
+from a uniform distribution or a Gaussian distribution (using
+re-parameterization trick) to obtain data. How to use a simple
+distribution or other methods for sampling is also a consideration in
+the modeling process.</p>
+<h1 id="models">Models</h1>
+<h2 id="latent-variable-models">Latent Variable Models</h2>
+<p><span class="math inline">\(p(x) = \int p(x|z)p(z)dz\)</span>, where
+<span class="math inline">\(z\)</span> follows the distribution <span class="math inline">\(p(z)\)</span>. <span class="math inline">\(z\)</span> is called a latent variable, and <span class="math inline">\(p(z)\)</span> is a prior probability distribution
+that can be arbitrarily specified. A model of this form is called a
+latent variable model.</p>
+<p>For a single latent variable model, we can approximate <span class="math inline">\(p(x|z)\)</span> by <span class="math inline">\(p_{\theta}(x|z)\)</span>. Once we have done so, it
+is easy to compute <span class="math inline">\(p_{\theta}(x) = \int
+p_{\theta}(x|z)p(z)dz\)</span>. By using the prior <span class="math inline">\(p(z)\)</span>, we can approximate the joint
+probability <span class="math inline">\(p(x,z)\)</span>, which is
+equivalent to approximating the likelihood <span class="math inline">\(p(x|z)\)</span> since <span class="math inline">\(p(x,z) = p(x|z)p(z)\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}KL(p(x,z)||p_\theta(x,z)) &amp;= \int\int
+p(x,z)log\frac{p(x,z)}{p_\theta(x,z)}dzdx\\ &amp;= \mathbb{E}_{x\sim
+p(x)}[logp(x)] + \mathbb{E}_{x\sim p(x)}[\int
+p(z|x)log\frac{p(z|x)}{p_\theta(x,z)}dz] \\ &amp;=C + L\mathbb{} \\ \\L
+&amp;= KL(p(x,z)||p_\theta(x,z)) - C \\ &amp;= \mathbb{E}_{x\sim
+p(x)}[\int p(z|x)log\frac{p(z|x)}{p_\theta(x,z)}dz]\end{aligned}
+\]</span></p>
+<p>Minimizing <span class="math inline">\(KL(p(x,z)||p_\theta(x,z))\)</span> is equivalent
+to minimizing <span class="math inline">\(L\)</span>, which is called
+the evidence lower bound (ELBO).</p>
+<p>(Actually it&#x2019;s the negative of ELBO: <span class="math inline">\(\mathbb{E}_{z\sim p(z|x)}[\int
+p(z|x)log\frac{p_\theta(x,z)}{p(z|x)}dz] \le \log p_\theta(x)\)</span>
+)</p>
+<p><span class="math display">\[
+\begin{align} L &amp;= \mathbb{E}_{x\sim p(x)}[\int
+p(z|x)log\frac{p(z|x)}{p_\theta(x,z)}dz] \\ &amp;= \mathbb{E}_{x\sim
+p(x)}[\mathbb{E}_{z\sim p(z|x)}[-log p_\theta(x|z)] + KL(p(z|x)||p(z)) ]
+\end{align}
+\]</span></p>
+<p>We refer to the neural network approximating <span class="math inline">\(p_\theta(x|z)\)</span> as the decoder, and the
+neural network approximating <span class="math inline">\(p_\theta(z|x)\)</span> as the encoder.</p>
+<p>First, let&apos;s look at the first term of the optimization function L,
+where <span class="math inline">\(p_\theta(x|z)\)</span> is the
+<strong>likelihood</strong> function. Therefore, minimizing <span class="math inline">\(-log p_\theta(x|z)\)</span> is equivalent to
+maximizing the likelihood function. The second term aims to make the
+true posterior distribution <span class="math inline">\(p(z|x)\)</span>
+as close as possible to the prior distribution <span class="math inline">\(p(z)\)</span>, so that the <span class="math inline">\(z\)</span> sampled from the prior distribution can
+correspond to the data <span class="math inline">\(x\)</span> and be fed
+into the decoder for better generation.</p>
+<p>There are still some difficulties:</p>
+<ul>
+<li>How to generate <span class="math inline">\(x\)</span>? According to
+<span class="math inline">\(p_{\theta}(x) = \int
+p_{\theta}(x|z)p(z)dz\)</span>, we would need to sample an infinite
+number of <span class="math inline">\(z\)</span> values to obtain <span class="math inline">\(p_\theta(x)\)</span>.</li>
+<li>If we already have <span class="math inline">\(p_\theta(x)\)</span>,
+it remains unclear how to sample <span class="math inline">\(x\)</span>
+from it.</li>
+</ul>
+<p>Some possible solutions:</p>
+<ul>
+<li>We can view <span class="math inline">\(p_\theta(x|z)\)</span> as
+generating <span class="math inline">\(x\)</span> from <span class="math inline">\(z\)</span>.</li>
+<li>We can use <span class="math inline">\(\mu = \mathbb{E}_{x\sim
+p_\theta (x|z)}[x]\)</span> to represent <span class="math inline">\(x\)</span> generated by <span class="math inline">\(z\)</span>.</li>
+</ul>
+<p>Then here comes some targets:</p>
+<ul>
+<li>We can derive the maximum likelihood and expectation from the
+likelihood function <span class="math inline">\(p_\theta(x|z)\)</span>.
+This means that the formulation should be &quot;nice&quot;.</li>
+<li>The form of the posterior <span class="math inline">\(p(z|x)\)</span> is sufficient for us to calculate
+its KL divergence with the prior <span class="math inline">\(p(z)\)</span>.</li>
+</ul>
+<p>Some additional information&#xFF1A;</p>
+<p>An intuitive explanation for the need of a latent variable and how we
+can circumvent the prohibitively expensive integral <span class="math inline">\(p_{\theta}(x) = \int
+p_{\theta}(x|z)p(z)dz\)</span> can be found on Wikipedia:</p>
+<figure>
+<img src="/2023/06/07/Foundation%20of%20Generative%20Models%20f39f163079ab452089acb50076ba753d/Untitled.png" alt="Untitled">
+<figcaption aria-hidden="true">Untitled</figcaption>
+</figure>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(X\)</span>: observable</th>
+<th><span class="math inline">\(X,Z\)</span></th>
+<th><span class="math inline">\(Z\)</span>: latent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p^*(x)&#x2248;p_&#x3B8;(x)&#x2248;\frac{p_&#x3B8;(x|z)p(z)}{q_&#x3D5;(z|x)}\)</span>&#xA0;approximable</td>
+<td></td>
+<td><span class="math inline">\(p(z)\)</span>, easy</td>
+</tr>
+<tr class="even">
+<td></td>
+<td><span class="math inline">\(p_&#x3B8;(x|z)p(z)\)</span>, easy</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_&#x3B8;(z|x)&#x2248;q_&#x3D5;(z|x)\)</span>&#xA0;approximable</td>
+<td></td>
+<td><span class="math inline">\(p_&#x3B8;(x|z)\)</span>, easy</td>
+</tr>
+</tbody>
+</table>
+<h3 id="autoencoder">Autoencoder</h3>
+<p>The idea behind autoencoders is that the latent variable z and x can
+uniquely correspond to each other. The mapping from <span class="math inline">\(x\)</span> to <span class="math inline">\(z\)</span> belongs to feature dimensionality
+reduction, while the mapping from <span class="math inline">\(z\)</span>
+to <span class="math inline">\(x\)</span> belongs to feature
+reconstruction. This is equivalent to the mapping between
+high-dimensional space and low-dimensional manifold, which belongs to a
+single latent variable model, and the latent variable space is
+continuous and uniform.</p>
+<ul>
+<li>Posterior: <span class="math inline">\(p(z|x)=
+\delta(z-C(x))\)</span>, where <span class="math inline">\(C(x)\)</span>
+is the true encoder and <span class="math inline">\(\delta(x)\)</span>
+is the Dirac delta function.</li>
+<li>Prior: <span class="math inline">\(p(z) = \frac{1}{D}, 0\le z\le
+D\)</span>.</li>
+<li>Likelihood: <span class="math inline">\(p_\theta (x|z) =
+N(G_\theta(z), \sigma^2I)\)</span>, where <span class="math inline">\(G_\theta(z)\)</span> is the decoder.</li>
+</ul>
+<h3 id="variational-autoencodervae">Variational Autoencoder(VAE)</h3>
+<p>VAE supposes that each <span class="math inline">\(x\)</span> should
+correspond to a distribution, and this distribution can be used to
+regenerate <span class="math inline">\(x\)</span>.</p>
+<ul>
+<li>Prior: <span class="math inline">\(p(z) = N(0,I)\)</span></li>
+<li>Posterior: <span class="math inline">\(p(z|x) = N(\mu,\sigma^2I),
+p_\theta(z|x) = N(C_\theta(x),\sigma^2I)\)</span></li>
+<li>Likelihood: <span class="math inline">\(p_\theta (x|z) =
+N(G_\theta(z), \sigma^2I)\)</span>, where <span class="math inline">\(G_\theta(z)\)</span> is the decoder.</li>
+</ul>
+<p>An intuitive explanation from zhihu:</p>
+<p>During training, since each <span class="math inline">\(x\)</span>
+corresponds to a Gaussian distribution, there are many Gaussian
+distributions <span class="math inline">\(p_\theta(z|x)\)</span> that
+aim to approximate <span class="math inline">\(p(z)\)</span>. As a
+result, during sampling, a <span class="math inline">\(z\)</span> value
+may be &#x201C;disputed&#x201D; by multiple Gaussian distributions <span class="math inline">\(p_\theta(x|z)\)</span>, and it may end up
+resembling the one with the closest mean, creating a &quot;chimera&quot; that
+generates diversity while still achieving the desired outcome.</p>
+<h3 id="diffusion">Diffusion</h3>
+<p>In contrast to the aforementioned single latent variable model,
+diffusion models involve several latent variables <span class="math inline">\(z_1,...,z_T\)</span>. The distribution of <span class="math inline">\(x\)</span> is expressed using a Markov Chain
+approach.</p>
+<p><span class="math display">\[
+p(x) = \int p(x|z_1)p(z_1|z_2)...p(z_{T-1}|z_T)p(z_T)dz_{1:T}
+\]</span></p>
+<p>Then the &#x201C;Bayesian components&#x201D; can be indicated as follows:</p>
+<ul>
+<li>Prior: <span class="math inline">\(p(z_T) = N(0,I)\)</span></li>
+<li>Posterior: <span class="math inline">\(p(z_T|x)= N(\mu, \sigma^2I),
+p(z_{t}|z_{t-1}) = N(\sqrt{\alpha_t}z_{t-1}, \beta_t)\)</span> (In
+DDPM).</li>
+<li>Likelihood: <span class="math inline">\(p(x|z_T) =
+p(x|z_1)p(z_1|z_2)...p(z_{T-1}|z_T)\)</span></li>
+</ul>
+<p>We observe that the encoder(posterior) here is unlearnable(fixed) and
+as <span class="math inline">\(T\rightarrow \infty\)</span>, <span class="math inline">\(p(z_T,x)\rightarrow N(0,I) = p(z_T)\)</span>.</p>
+<h3 id="flow-based-models">Flow-based Models</h3>
+<p>Flow models aim to establish a one-to-one correspondence between
+<span class="math inline">\(x\)</span> and the latent variable <span class="math inline">\(z\)</span>, similar to the single latent variable
+model of AE. However, what sets flow models apart is that they also aim
+for this correspondence to be a bijection.</p>
+<ul>
+<li>Posterior: <span class="math inline">\(p(z|x) =
+\delta(z-C(x))\)</span></li>
+<li>Likelihood: <span class="math inline">\(p(x|z) = \delta(x-G(z)), G =
+C^{-1}\)</span></li>
+<li>Prior: <span class="math inline">\(p(z) = N(0,I)\)</span></li>
+</ul>
+<h3 id="summary-for-latent-variable-models">Summary for Latent Variable
+Models</h3>
+<ul>
+<li>The concept behind AE is that <span class="math inline">\(x\)</span>
+and <span class="math inline">\(z\)</span> have a one-to-one
+correspondence, while VAE assumes that <span class="math inline">\(x\)</span> corresponds to a particular
+distribution. Both types of models use neural networks to directly fit
+their encoders and decoders.</li>
+<li>Like VAE, diffusion also aims for <span class="math inline">\(x\)</span> to correspond to a certain
+distribution, but it utilizes a chain-like structure for the encoder
+instead of directly simulating it with a neural network.</li>
+<li>The Flow model is comparable to AE in its aim for a unique
+correspondence between <span class="math inline">\(x\)</span> and <span class="math inline">\(z\)</span>, but it places greater emphasis on an
+inverse relationship between the encoder and decoder. As a result, its
+design is more rigorous than the encoder structure of Diffusion.</li>
+</ul>
+<h2 id="energy-based-models">Energy-based Models</h2>
+<p>Consider directly modeling <span class="math inline">\(p(x)\)</span>
+as:</p>
+<p><span class="math display">\[
+p_\theta(x) = \frac{q_\theta(x)}{Z(\theta)}
+\]</span></p>
+<p>Here, <span class="math inline">\(Z(\theta) = \int
+q_\theta(x)dx\)</span>, which is known as the normalization
+constant.</p>
+<p>Specifically, if <span class="math inline">\(q_\theta(x) =
+e^{-U_\theta(x)}\)</span>, then:</p>
+<p><span class="math display">\[
+p_\theta(x) = \frac{e^{-U_\theta(x)}}{Z(\theta)}
+\]</span></p>
+<p>Here, <span class="math inline">\(U_\theta(x)\)</span> is an
+unspecified function, also known as the energy function; and <span class="math inline">\(p_\theta(x)\)</span> is called the energy
+distribution, also known as the <strong>Maxwell&#x2013;Boltzmann
+Distribution</strong>.</p>
+<h3 id="score-matching">Score Matching</h3>
+<p>Score function <span class="math inline">\(s_\theta(x)=\nabla_{x}\log
+p_\theta(x) = \nabla_{x}\log q_\theta(x)\)</span><span class="math inline">\(\nabla_{x}\log p_\theta(x) = \nabla_{x}\log
+q_\theta(x)\)</span>, which is irrelevant to <span class="math inline">\(Z(\theta)\)</span>. Estimating the gradient of
+<span class="math inline">\(\nabla_{x}\log p_\theta(x)\)</span> can also
+provide insight into the data distribution, as they only differ by a
+scaling factor <span class="math inline">\(Z(\theta)\)</span>. This can
+be helpful in understanding the shape and trend of the data distribution
+<span class="math inline">\(p(x)\)</span>.</p>
+<p>The optimization object can be defined using Fisher divergence:</p>
+<p><span class="math display">\[
+\begin{aligned} J(\theta) &amp;=\frac{1}{2}\int p(x)||\nabla_{x}\log
+p_\theta(x) - \nabla_{x}\log p(x)  ||^2  dx\\ &amp;= \int
+p(x)[\frac{1}{2}||s_\theta(x)||^2 -s_\theta(x)^Ts_\theta(x) +
+\frac{1}{2}||s(x) ||^2]dx\end{aligned}
+\]</span></p>
+<p>The third term in this equation can be neglected since it&#x2019;s
+irrelevant to <span class="math inline">\(\theta\)</span>.p</p>
+<p>For the <span class="math inline">\(i^{th}\)</span> element of the
+second term here:</p>
+<p><span class="math display">\[
+\begin{aligned} -\int p(x)s_{\theta,i}(x)s_i(x)dx &amp;= -\int
+s_{\theta,i}(x)\frac{\partial p(x)}{\partial(x_i)}dx \\ &amp;=
+-\int[\int s_{\theta, i}(x)\frac{\partial
+p(x)}{\partial(x_i)}dx_i]dx_{1:n-\{i\}} \\ &amp;=
+-\int[s_{\theta,i}(x)p(x)\bigg|_{x = -\infty}^{x=+\infty}-\int
+p(x)\frac{\partial s_{\theta,i}(x)}{\partial(x_i)} dx_i]dx_{1:n-\{i\}}
+\\ &amp;= \int p(x)\frac{\partial
+s_{\theta,i}(x)}{\partial(x_i)}dx_{1:n} \end{aligned}
+\]</span></p>
+<p>Then the second term is:</p>
+<p><span class="math display">\[
+\begin{aligned} -\int p(x)s_\theta(x)^Ts_\theta(x) dx&amp;=\int
+p(x)tr(\nabla_\bold{x}s_\theta(x))dx_{1:n} \end{aligned}
+\]</span></p>
+<p>Then the optimization object is :</p>
+<p><span class="math display">\[
+\begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\nabla_x\log p_\theta
+(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))]d\bold{x}
+\\&amp;= \mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta
+(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))] \\&amp;=
+\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||s_\theta(x)||^2 +
+tr(\nabla_\bold{x}s_\theta (\bold{x}))].\end{aligned}
+\]</span></p>
+<p>Here <span class="math inline">\(\nabla_x^2\log p_\theta
+(\bold{x})\)</span> denotes the Hessian Matrix of <span class="math inline">\(\log p_\theta (\bold{x})\)</span>.</p>
+<h3 id="generative-adversarial-networkgan">****Generative Adversarial
+Network(GAN)****</h3>
+<p>pass</p>
+<h1 id="reference">Reference</h1>
+<p>Websites:</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/611466195">&#x6982;&#x7387;&#x89C6;&#x89D2;&#x4E0B;&#x7684;&#x751F;&#x6210;&#x6A21;&#x578B;</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/576779879">&#x6269;&#x6563;&#x6A21;&#x578B;&#x4E0E;&#x80FD;&#x91CF;&#x6A21;&#x578B;&#xFF0C;Score-Matching&#x548C;SDE&#xFF0C;ODE&#x7684;&#x5173;&#x7CFB;</a></p>
+<p><a target="_blank" rel="noopener" href="https://yang-song.net/blog/2021/score/">Generative Modeling
+by Estimating Gradients of the Data Distribution | Yang Song</a></p>
+<p><a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What
+are Diffusion Models?</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Evidence_lower_bound">Evidence
+lower bound</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+              <a href="/tags/Generative-Models/" rel="tag"># Generative Models</a>
+              <a href="/tags/Mathematics/" rel="tag"># Mathematics</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/02/18/Linear-Algebra-Note/" rel="prev" title="Linear Algebra Note">
+      <i class="fa fa-chevron-left"></i> Linear Algebra Note
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#foundation-of-generative-models"><span class="nav-number">1.</span> <span class="nav-text">Foundation of Generative
+Models</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#definition"><span class="nav-number">2.</span> <span class="nav-text">Definition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#difficulties"><span class="nav-number">3.</span> <span class="nav-text">Difficulties</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#models"><span class="nav-number">4.</span> <span class="nav-text">Models</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#latent-variable-models"><span class="nav-number">4.1.</span> <span class="nav-text">Latent Variable Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#autoencoder"><span class="nav-number">4.1.1.</span> <span class="nav-text">Autoencoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#variational-autoencodervae"><span class="nav-number">4.1.2.</span> <span class="nav-text">Variational Autoencoder(VAE)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#diffusion"><span class="nav-number">4.1.3.</span> <span class="nav-text">Diffusion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flow-based-models"><span class="nav-number">4.1.4.</span> <span class="nav-text">Flow-based Models</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#summary-for-latent-variable-models"><span class="nav-number">4.1.5.</span> <span class="nav-text">Summary for Latent Variable
+Models</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#energy-based-models"><span class="nav-number">4.2.</span> <span class="nav-text">Energy-based Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#score-matching"><span class="nav-number">4.2.1.</span> <span class="nav-text">Score Matching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generative-adversarial-networkgan"><span class="nav-number">4.2.2.</span> <span class="nav-text">****Generative Adversarial
+Network(GAN)****</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WANG YIYANG"
+      src="/images/wyy.jpeg">
+  <p class="site-author-name" itemprop="name">WANG YIYANG</p>
+  <div class="site-description" itemprop="description">A junior student from the School of EECS, Peking University.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ateb14" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ateb14" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WANG YIYANG</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>

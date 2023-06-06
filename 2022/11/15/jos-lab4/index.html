@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="LAB4, PREEMPTIVE MULTITASKINGI finished these challenges:  Implement sfork(). Implement the fixed-priority scheduler.  Multiprocessor Support and Cooperative MultitaskingJos will support &amp;#x201C;symme">
+  <meta name="description" content="LAB4, PREEMPTIVE MULTITASKING I finished these challenges:  Implement sfork(). Implement the fixed-priority scheduler.  Multiprocessor Support and Cooperative Multitasking Jos will support &quot;symme">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jos-lab4">
 <meta property="og:url" content="http://ateb14.github.io/2022/11/15/jos-lab4/index.html">
 <meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
-<meta property="og:description" content="LAB4, PREEMPTIVE MULTITASKINGI finished these challenges:  Implement sfork(). Implement the fixed-priority scheduler.  Multiprocessor Support and Cooperative MultitaskingJos will support &amp;#x201C;symme">
+<meta property="og:description" content="LAB4, PREEMPTIVE MULTITASKING I finished these challenges:  Implement sfork(). Implement the fixed-priority scheduler.  Multiprocessor Support and Cooperative Multitasking Jos will support &quot;symme">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-15T02:49:18.000Z">
 <meta property="article:modified_time" content="2022-12-11T12:25:54.856Z">
@@ -216,59 +216,223 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="LAB4-PREEMPTIVE-MULTITASKING"><a href="#LAB4-PREEMPTIVE-MULTITASKING" class="headerlink" title="LAB4, PREEMPTIVE MULTITASKING"></a>LAB4, PREEMPTIVE MULTITASKING</h1><p>I finished these challenges:</p>
+        <h1 id="lab4-preemptive-multitasking">LAB4, PREEMPTIVE MULTITASKING</h1>
+<p>I finished these challenges:</p>
 <ul>
 <li>Implement sfork().</li>
 <li>Implement the fixed-priority scheduler.</li>
 </ul>
-<h2 id="Multiprocessor-Support-and-Cooperative-Multitasking"><a href="#Multiprocessor-Support-and-Cooperative-Multitasking" class="headerlink" title="Multiprocessor Support and Cooperative Multitasking"></a>Multiprocessor Support and Cooperative Multitasking</h2><p>Jos will support &#x201C;symmetric multiprocessing&#x201D;(SMP) after this part.</p>
-<h3 id="Multiprocessor-Support-amp-Application-Processor-Bootstrap-amp-Question-1"><a href="#Multiprocessor-Support-amp-Application-Processor-Bootstrap-amp-Question-1" class="headerlink" title="Multiprocessor Support &amp; Application Processor Bootstrap &amp; Question 1"></a>Multiprocessor Support &amp; Application Processor Bootstrap &amp; Question 1</h3><p><em>Compare <code>kern/mpentry.S</code> side by side with <code>boot/boot.S</code>. Bearing in mind that <code>kern/mpentry.S</code> is compiled and linked to run above <code>KERNBASE</code> just like everything else in the kernel, what is the purpose of macro <code>MPBOOTPHYS</code>? Why is it necessary in <code>kern/mpentry.S</code> but not in <code>boot/boot.S</code>? In other words, what could go wrong if it were omitted in <code>kern/mpentry.S</code>?</em></p>
-<p>The macro <code>MPBOOTPHYS</code> is used to calculate the physical address of the given symbols in <code>kern/mpentry.S</code>. The load address of the application processors&#x2019;(AP) booting code is specified by the bootstrap processor(BSP), which is irrelevant with the load address set by the linker, thus it&#x2019;s necessary to calculate the physical addresses of all the symbols at runtime.</p>
-<h3 id="Per-CPU-State-and-Initialization"><a href="#Per-CPU-State-and-Initialization" class="headerlink" title="Per-CPU State and Initialization"></a>Per-CPU State and Initialization</h3><p>These are the per-cpu states needed to be initialized when booting the APs.</p>
+<h2 id="multiprocessor-support-and-cooperative-multitasking">Multiprocessor
+Support and Cooperative Multitasking</h2>
+<p>Jos will support &quot;symmetric multiprocessing&quot;(SMP) after this
+part.</p>
+<h3 id="multiprocessor-support-application-processor-bootstrap-question-1">Multiprocessor
+Support &amp; Application Processor Bootstrap &amp; Question 1</h3>
+<p><em>Compare <code>kern/mpentry.S</code> side by side with
+<code>boot/boot.S</code>. Bearing in mind that
+<code>kern/mpentry.S</code> is compiled and linked to run above
+<code>KERNBASE</code> just like everything else in the kernel, what is
+the purpose of macro <code>MPBOOTPHYS</code>? Why is it necessary in
+<code>kern/mpentry.S</code> but not in <code>boot/boot.S</code>? In
+other words, what could go wrong if it were omitted in
+<code>kern/mpentry.S</code>?</em></p>
+<p>The macro <code>MPBOOTPHYS</code> is used to calculate the physical
+address of the given symbols in <code>kern/mpentry.S</code>. The load
+address of the application processors&apos;(AP) booting code is specified by
+the bootstrap processor(BSP), which is irrelevant with the load address
+set by the linker, thus it&apos;s necessary to calculate the physical
+addresses of all the symbols at runtime.</p>
+<h3 id="per-cpu-state-and-initialization">Per-CPU State and
+Initialization</h3>
+<p>These are the per-cpu states needed to be initialized when booting
+the APs.</p>
 <ul>
 <li>Per-cpu kernel stack</li>
-<li>Per-cpu kernel TSS and TSS descriptor: The TSS descriptors are contained in the GDT at offset <code>GD_TSS0</code>, remember to set a busy flag on it using <code>ltr(GD_TSS0 + (i &lt;&lt; 3))</code> after setting up the TSS for the current booting ith CPU!</li>
+<li>Per-cpu kernel TSS and TSS descriptor: The TSS descriptors are
+contained in the GDT at offset <code>GD_TSS0</code>, remember to set a
+busy flag on it using <code>ltr(GD_TSS0 + (i &lt;&lt; 3))</code> after
+setting up the TSS for the current booting ith CPU!</li>
 <li>Per-CPU current environment pointer</li>
-<li>Per-CPU system registers: All registers are private to a CPU, so remember to initialize them for every AP! Recall that I&#x2019;ve enabled the huge page flag of cr4 register in lab2 to support the huge page mapping above KERNBASE, so it&#x2019;s necessary to enable it again before we loading the page directory into cr3.</li>
+<li>Per-CPU system registers: All registers are private to a CPU, so
+remember to initialize them for every AP! Recall that I&apos;ve enabled the
+huge page flag of cr4 register in lab2 to support the huge page mapping
+above KERNBASE, so it&apos;s necessary to enable it again before we loading
+the page directory into cr3.</li>
 </ul>
-<h3 id="Locking-amp-Question-2"><a href="#Locking-amp-Question-2" class="headerlink" title="Locking &amp; Question 2"></a>Locking &amp; Question 2</h3><p><em>It seems that using the big kernel lock guarantees that only one CPU can run the kernel code at a time. Why do we still need separate kernel stacks for each CPU? Describe a scenario in which using a shared kernel stack will go wrong, even with the protection of the big kernel lock.</em></p>
-<p>For example, when the kernel is trapped from the user mode, the CPU has already pushed some contents of the trap frame onto the kernel stack before the kernel acquires the big kernel lock, so if there are multiple traps from the user mode on different CPUs at the same time, the single kernel stack will be messed up by all these trap frames.</p>
-<h3 id="Round-Robin-Scheduling-amp-Question-3-4"><a href="#Round-Robin-Scheduling-amp-Question-3-4" class="headerlink" title="Round-Robin Scheduling &amp; Question 3,4"></a>Round-Robin Scheduling &amp; Question 3,4</h3><p><em>In your implementation of <code>env_run()</code> you should have called <code>lcr3()</code>. Before and after the call to <code>lcr3()</code>, your code makes references (at least it should) to the variable <code>e</code>, the argument to <code>env_run</code>. Upon loading the <code>%cr3</code> register, the addressing context used by the MMU is instantly changed. But a virtual address (namely <code>e</code>) has meaning relative to a given address context&#x2013;the address context specifies the physical address to which the virtual address maps. Why can the pointer <code>e</code> be dereferenced both before and after the addressing switch?</em></p>
-<p>For the mappings in the kernel space, i.e. the addresses above UTOP, are the same for every environment as well as the kernel.</p>
-<p><em>Whenever the kernel switches from one environment to another, it must ensure the old environment&#x2019;s registers are saved so they can be restored properly later. Why? Where does this happen?</em></p>
-<p>Because the environments don&#x2019;t have a private space to store their registers when a context switch happens, so the kernel should store them in the environment descriptors(PCB). It happens when a trap is occurred and is in the handler function &#x201C;trap&#x201D; in <code>kern/trap.c</code>.</p>
+<h3 id="locking-question-2">Locking &amp; Question 2</h3>
+<p><em>It seems that using the big kernel lock guarantees that only one
+CPU can run the kernel code at a time. Why do we still need separate
+kernel stacks for each CPU? Describe a scenario in which using a shared
+kernel stack will go wrong, even with the protection of the big kernel
+lock.</em></p>
+<p>For example, when the kernel is trapped from the user mode, the CPU
+has already pushed some contents of the trap frame onto the kernel stack
+before the kernel acquires the big kernel lock, so if there are multiple
+traps from the user mode on different CPUs at the same time, the single
+kernel stack will be messed up by all these trap frames.</p>
+<h3 id="round-robin-scheduling-question-34">Round-Robin Scheduling &amp;
+Question 3,4</h3>
+<p><em>In your implementation of <code>env_run()</code> you should have
+called <code>lcr3()</code>. Before and after the call to
+<code>lcr3()</code>, your code makes references (at least it should) to
+the variable <code>e</code>, the argument to <code>env_run</code>. Upon
+loading the <code>%cr3</code> register, the addressing context used by
+the MMU is instantly changed. But a virtual address (namely
+<code>e</code>) has meaning relative to a given address context--the
+address context specifies the physical address to which the virtual
+address maps. Why can the pointer <code>e</code> be dereferenced both
+before and after the addressing switch?</em></p>
+<p>For the mappings in the kernel space, i.e. the addresses above UTOP,
+are the same for every environment as well as the kernel.</p>
+<p><em>Whenever the kernel switches from one environment to another, it
+must ensure the old environment&apos;s registers are saved so they can be
+restored properly later. Why? Where does this happen?</em></p>
+<p>Because the environments don&apos;t have a private space to store their
+registers when a context switch happens, so the kernel should store them
+in the environment descriptors(PCB). It happens when a trap is occurred
+and is in the handler function &quot;trap&quot; in <code>kern/trap.c</code>.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copy trap frame (which is currently on the stack)</span></span><br><span class="line"><span class="comment">// into &apos;curenv-&gt;env_tf&apos;, so that running the environment</span></span><br><span class="line"><span class="comment">// will restart at the trap point.</span></span><br><span class="line">curenv-&gt;env_tf = *tf;</span><br><span class="line"><span class="comment">// The trapframe on the stack should be ignored from here on.</span></span><br><span class="line">tf = &amp;curenv-&gt;env_tf;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Challenge-Fixed-priority-Scheduler"><a href="#Challenge-Fixed-priority-Scheduler" class="headerlink" title="Challenge: Fixed-priority Scheduler"></a>Challenge: Fixed-priority Scheduler</h3><p>I add an extra field called <code>env_priority</code> in the PCB of every environment, which stands for the priority of an environment and is set to 10000 by default. Then I implement a system call named <code>sys_set_priority</code>, through which an environment can change the priority of itself or its children, but the value of the target priority is forced to be equal or less than the current environment&#x2019;s priority. Also I modify the scheduler in <code>kern/sched.c</code> that higher-priority environments are always chosen in preference to the lower-priority ones, by simply scanning all the runnable environments.</p>
-<p>Here is a simple test program to verify the correctness by assigning ascending priorities to different children, and the parent is always the highest.</p>
+<h3 id="challenge-fixed-priority-scheduler">Challenge: Fixed-priority
+Scheduler</h3>
+<p>I add an extra field called <code>env_priority</code> in the PCB of
+every environment, which stands for the priority of an environment and
+is set to 10000 by default. Then I implement a system call named
+<code>sys_set_priority</code>, through which an environment can change
+the priority of itself or its children, but the value of the target
+priority is forced to be equal or less than the current environment&apos;s
+priority. Also I modify the scheduler in <code>kern/sched.c</code> that
+higher-priority environments are always chosen in preference to the
+lower-priority ones, by simply scanning all the runnable
+environments.</p>
+<p>Here is a simple test program to verify the correctness by assigning
+ascending priorities to different children, and the parent is always the
+highest.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">umain</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">{</span><br><span class="line">	cprintf(<span class="string">&quot;hello, world\n&quot;</span>);</span><br><span class="line">	cprintf(<span class="string">&quot;i am environment %08x\n&quot;</span>, thisenv-&gt;env_id);</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="type">envid_t</span> envid[<span class="number">10</span>];</span><br><span class="line">	<span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i){</span><br><span class="line">		envid[i] = fork();</span><br><span class="line">		<span class="keyword">if</span>(envid[i] == <span class="number">0</span>){</span><br><span class="line">			cprintf(<span class="string">&quot;Hello I am child %d with priority %u\n&quot;</span>, i, thisenv-&gt;env_priority);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		} </span><br><span class="line">		<span class="type">int</span> r = sys_set_priority(envid[i], i);</span><br><span class="line">		<span class="keyword">if</span>(r &lt; <span class="number">0</span>){</span><br><span class="line">			panic(<span class="string">&quot;PRIOR: %e&quot;</span>, r);</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
-
 <p>The output is as expected, as the children execute in order.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[00000000] new env 00001000</span><br><span class="line">hello, world</span><br><span class="line">i am environment 00001000</span><br><span class="line">[00001000] new env 00001001</span><br><span class="line">... ignoring many similar outputs...</span><br><span class="line">[00001000] new env 00001009</span><br><span class="line">[00001000] new env 0000100a</span><br><span class="line">[00001000] exiting gracefully</span><br><span class="line">[00001000] free env 00001000</span><br><span class="line">Hello I am child 9 with priority 9</span><br><span class="line">[0000100a] exiting gracefully</span><br><span class="line">[0000100a] free env 0000100a</span><br><span class="line">Hello I am child 8 with priority 8</span><br><span class="line">[00001009] exiting gracefully</span><br><span class="line">[00001009] free env 00001009</span><br><span class="line">... ignoring many similar outputs...</span><br><span class="line">[00001002] exiting gracefully</span><br><span class="line">[00001002] free env 00001002</span><br><span class="line">Hello I am child 0 with priority 0</span><br><span class="line">[00001001] exiting gracefully</span><br><span class="line">[00001001] free env 00001001</span><br><span class="line">No runnable environments in the system!</span><br></pre></td></tr></table></figure>
-
-<h3 id="System-Calls-for-Environment-Creation"><a href="#System-Calls-for-Environment-Creation" class="headerlink" title="System Calls for Environment Creation"></a>System Calls for Environment Creation</h3><p>In this section we should implement several primitives as some system calls, remember to check the permission and the relationship when one user environment tries to modify the status of a destination environment .</p>
+<h3 id="system-calls-for-environment-creation">System Calls for
+Environment Creation</h3>
+<p>In this section we should implement several primitives as some system
+calls, remember to check the permission and the relationship when one
+user environment tries to modify the status of a destination environment
+.</p>
 <ul>
-<li>sys_exofork: Create another environment and block it. Remember to clear the eax register in the trap frame of the newly created environment.</li>
+<li>sys_exofork: Create another environment and block it. Remember to
+clear the eax register in the trap frame of the newly created
+environment.</li>
 <li>sys_env_set_status: Block or unblock a specified environment.</li>
-<li>sys_page_alloc, sys_page_map, sys_page_unmap: These are the primitives to manipulate the address space of a specified environment, so we should carefully handle all the possible errors!</li>
+<li>sys_page_alloc, sys_page_map, sys_page_unmap: These are the
+primitives to manipulate the address space of a specified environment,
+so we should carefully handle all the possible errors!</li>
 </ul>
-<h2 id="Copy-on-Write-Fork"><a href="#Copy-on-Write-Fork" class="headerlink" title="Copy-on-Write Fork"></a>Copy-on-Write Fork</h2><h3 id="Invoking-the-User-Page-Fault-Handler-amp-User-mode-Page-Fault-Entrypoint"><a href="#Invoking-the-User-Page-Fault-Handler-amp-User-mode-Page-Fault-Entrypoint" class="headerlink" title="Invoking the User Page Fault Handler &amp; User-mode Page Fault Entrypoint"></a>Invoking the User Page Fault Handler &amp; User-mode Page Fault Entrypoint</h3><p>The page fault handler defined by the user(the page fault upcall) by which the user environment will handle the page fault on its exception stack, so the kernel only needs to make sure that the address of the upcall is valid and the user exception stack is allocated and is sufficient to push a user trap frame on. Depending on whether the incoming trap is from a previous upcall or not, the kernel will allocate a word on the exception stack in addition to the fixed space for a user trap frame if it&#x2019;s from a upcall, which is useful for the user handler to restore the context when a recursive upcall hanppens. After that, the kernel will set the trap frame(not the user trap frame!) of the current environment, where the eip is set to the entry point of the user page fault handler and the esp is set to the stack pointer of the user exception stack.</p>
-<p>The entry point of the user page fault handler is defined in <code>lib/pfentry.S</code>, which will call the C-language page fault  handler and return to the instruction that triggers page fault afterwards. This is perhaps the most tricky part in this lab, for there might be a transition from the exception stack to the normal stack and we should treat it equally as the recursive upcall situation, as well that we should restore all the general register.</p>
-<p>To solve this problem, we should push the trap-time eip to the <strong>trap-time</strong> stack, and use a <code>ret</code> instruction to restore executions after we have restored the general registers and the eflag properly. However, we can&#x2019;t use the <code>push</code> instruction directly for sure, instead, we should read the trap-time esp from the user trap frame and manually &#x201C;push&#x201D; the trap-time eip by subtracting a word from the trap-time esp and writing the eip to the space it points to. Recall that the kernel will leave an extra word on the exception stack so it won&#x2019;t violate the structure of the user trap frame when there is a recursive upcall. After that, we use <code>popal</code> and <code>popf</code> to restore the general registers and the eflag &#x2014; we do it after the &#x201C;push&#x201D; operation because we have to use the general registers to do some calculations. Finally, we load the esp with the value of the trap-time esp and use a <code>ret</code> instruction to restore executions.</p>
-<h3 id="Implementing-Copy-on-Write-Fork"><a href="#Implementing-Copy-on-Write-Fork" class="headerlink" title="Implementing Copy-on-Write Fork"></a>Implementing Copy-on-Write Fork</h3><p>In this section we should implement a <strong>user-level</strong> copy-on-write fork based on the system calls above, and here are the functions we should implement.</p>
+<h2 id="copy-on-write-fork">Copy-on-Write Fork</h2>
+<h3 id="invoking-the-user-page-fault-handler-user-mode-page-fault-entrypoint">Invoking
+the User Page Fault Handler &amp; User-mode Page Fault Entrypoint</h3>
+<p>The page fault handler defined by the user(the page fault upcall) by
+which the user environment will handle the page fault on its exception
+stack, so the kernel only needs to make sure that the address of the
+upcall is valid and the user exception stack is allocated and is
+sufficient to push a user trap frame on. Depending on whether the
+incoming trap is from a previous upcall or not, the kernel will allocate
+a word on the exception stack in addition to the fixed space for a user
+trap frame if it&apos;s from a upcall, which is useful for the user handler
+to restore the context when a recursive upcall hanppens. After that, the
+kernel will set the trap frame(not the user trap frame!) of the current
+environment, where the eip is set to the entry point of the user page
+fault handler and the esp is set to the stack pointer of the user
+exception stack.</p>
+<p>The entry point of the user page fault handler is defined in
+<code>lib/pfentry.S</code>, which will call the C-language page fault
+handler and return to the instruction that triggers page fault
+afterwards. This is perhaps the most tricky part in this lab, for there
+might be a transition from the exception stack to the normal stack and
+we should treat it equally as the recursive upcall situation, as well
+that we should restore all the general register.</p>
+<p>To solve this problem, we should push the trap-time eip to the
+<strong>trap-time</strong> stack, and use a <code>ret</code> instruction
+to restore executions after we have restored the general registers and
+the eflag properly. However, we can&apos;t use the <code>push</code>
+instruction directly for sure, instead, we should read the trap-time esp
+from the user trap frame and manually &quot;push&quot; the trap-time eip by
+subtracting a word from the trap-time esp and writing the eip to the
+space it points to. Recall that the kernel will leave an extra word on
+the exception stack so it won&apos;t violate the structure of the user trap
+frame when there is a recursive upcall. After that, we use
+<code>popal</code> and <code>popf</code> to restore the general
+registers and the eflag &#x2014; we do it after the &quot;push&quot; operation because we
+have to use the general registers to do some calculations. Finally, we
+load the esp with the value of the trap-time esp and use a
+<code>ret</code> instruction to restore executions.</p>
+<h3 id="implementing-copy-on-write-fork">Implementing Copy-on-Write
+Fork</h3>
+<p>In this section we should implement a <strong>user-level</strong>
+copy-on-write fork based on the system calls above, and here are the
+functions we should implement.</p>
 <ul>
-<li>duppage:  It duplicates a page table entry and moves it into the child&#x2019;s page tables, and if the page pointed by this entry is writable or copy-on-write, the page table entries of both the parent and the child should be updated to copy-on-write.</li>
-<li>pgfault: This is the alternative page fault handler specified by the user, which will allocate a new page and copy the old page to it when there is an access to a copy-on-write page. And then it will add a new mapping to the environment that triggers this page fault in place of the old mapping and mark it as writable.</li>
-<li>fork: It forks a child environment using <code>sys_exofork</code>. For the child, it simply resets the <code>thisenv</code> variable to the child. While for the parent, it uses duppage to construct the mappings of the child below the user exception stack and allocates a writable exception stack for the child &#x2014; this is necessary for the page fault handler that deals with a copy-on-write page will run on a exception stack. Then the parent sets the page fault handler of the child and unblocks it.</li>
+<li>duppage: It duplicates a page table entry and moves it into the
+child&apos;s page tables, and if the page pointed by this entry is writable
+or copy-on-write, the page table entries of both the parent and the
+child should be updated to copy-on-write.</li>
+<li>pgfault: This is the alternative page fault handler specified by the
+user, which will allocate a new page and copy the old page to it when
+there is an access to a copy-on-write page. And then it will add a new
+mapping to the environment that triggers this page fault in place of the
+old mapping and mark it as writable.</li>
+<li>fork: It forks a child environment using <code>sys_exofork</code>.
+For the child, it simply resets the <code>thisenv</code> variable to the
+child. While for the parent, it uses duppage to construct the mappings
+of the child below the user exception stack and allocates a writable
+exception stack for the child &#x2014; this is necessary for the page fault
+handler that deals with a copy-on-write page will run on a exception
+stack. Then the parent sets the page fault handler of the child and
+unblocks it.</li>
 </ul>
-<h3 id="Challenge-sfork"><a href="#Challenge-sfork" class="headerlink" title="Challenge: sfork()"></a>Challenge: sfork()</h3><p>The way to implement the shared-memory sfork() is similar to that of fork(), I just simply copy the page table entries of the parent environment except for the exception stack and the normal stack. Then I allocate a writable page for the exception stack and mark the normal stack as copy-on-write for the child environment.</p>
-<p>The previous <code>thisenv</code> pointer in the user library is no longer compatible with sfork(), for it is statically lay in the .text area of the program, which will be sharable and thus leads to conflict between different environments. Then I manage to solve this problem by making it dynamic with the help of a macro:</p>
+<h3 id="challenge-sfork">Challenge: sfork()</h3>
+<p>The way to implement the shared-memory sfork() is similar to that of
+fork(), I just simply copy the page table entries of the parent
+environment except for the exception stack and the normal stack. Then I
+allocate a writable page for the exception stack and mark the normal
+stack as copy-on-write for the child environment.</p>
+<p>The previous <code>thisenv</code> pointer in the user library is no
+longer compatible with sfork(), for it is statically lay in the .text
+area of the program, which will be sharable and thus leads to conflict
+between different environments. Then I manage to solve this problem by
+making it dynamic with the help of a macro:</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> thisenv (&amp;((struct Env *)UENVS)[ENVX(sys_getenvid())])</span></span><br></pre></td></tr></table></figure>
-
-<p>So for now, every time an environment tries to get access to its PCB, it will make a system call to fetch it. I gain the correctness at the cost of some efficiency loss.</p>
-<h2 id="Preemptive-Multitasking-and-Inter-Process-Communication-IPC"><a href="#Preemptive-Multitasking-and-Inter-Process-Communication-IPC" class="headerlink" title="Preemptive Multitasking and Inter-Process Communication (IPC)"></a>Preemptive Multitasking and Inter-Process Communication (IPC)</h2><h3 id="Clock-Interrupts-and-Preemption"><a href="#Clock-Interrupts-and-Preemption" class="headerlink" title="Clock Interrupts and Preemption"></a>Clock Interrupts and Preemption</h3><p>To receive and handle the hardware interrupts, the entries after IRQ_OFFSET in the IDT should be initialized just like what I&#x2019;ve done in lab3, and the FL_IF flag should be enabled when a user environment is running. For simplicity, this flag is disabled when the kernel is executing. The kernel will handle the clock interrupts by simply calling <code>sched_yield</code> to transfer the control flow to another environment if there is any.</p>
-<h3 id="Inter-Process-Communication-IPC"><a href="#Inter-Process-Communication-IPC" class="headerlink" title="Inter-Process Communication (IPC)"></a>Inter-Process Communication (IPC)</h3><p>Two environments are able to communicate with each other by a sender function and a receiver function defined by the kernel. For the receiver, it marks itself as ready to receive a message and blocks itself waiting for a message. For the sender,  if the receiver is in the receivable state, it will store the message in the PCB of the receiver environment, mark the receiver as unable to receive a new message and awake it. Or if the receiver is unable to receive a message, the sender simply returns an error code. The message delivered from the sender discussed above contains a word, an address and a permission status. If the address is below UTOP, and the receiver also specifies an address below UTOP, the sender will also map the address of the receiver&#x2019;s to the physical page to which the address of the sender&#x2019;s points, with the permission status sent from the sender, as a result the receiver will share this physical page with the sender.</p>
-<p>In the view of the user environments, the receiver simply make the receiver system call and waits for a sender, while the sender will repeatedly make the sender system call until the target environment receives the message or it encounters a unrecoverable failure.</p>
+<p>So for now, every time an environment tries to get access to its PCB,
+it will make a system call to fetch it. I gain the correctness at the
+cost of some efficiency loss.</p>
+<h2 id="preemptive-multitasking-and-inter-process-communication-ipc">Preemptive
+Multitasking and Inter-Process Communication (IPC)</h2>
+<h3 id="clock-interrupts-and-preemption">Clock Interrupts and
+Preemption</h3>
+<p>To receive and handle the hardware interrupts, the entries after
+IRQ_OFFSET in the IDT should be initialized just like what I&apos;ve done in
+lab3, and the FL_IF flag should be enabled when a user environment is
+running. For simplicity, this flag is disabled when the kernel is
+executing. The kernel will handle the clock interrupts by simply calling
+<code>sched_yield</code> to transfer the control flow to another
+environment if there is any.</p>
+<h3 id="inter-process-communication-ipc">Inter-Process Communication
+(IPC)</h3>
+<p>Two environments are able to communicate with each other by a sender
+function and a receiver function defined by the kernel. For the
+receiver, it marks itself as ready to receive a message and blocks
+itself waiting for a message. For the sender, if the receiver is in the
+receivable state, it will store the message in the PCB of the receiver
+environment, mark the receiver as unable to receive a new message and
+awake it. Or if the receiver is unable to receive a message, the sender
+simply returns an error code. The message delivered from the sender
+discussed above contains a word, an address and a permission status. If
+the address is below UTOP, and the receiver also specifies an address
+below UTOP, the sender will also map the address of the receiver&apos;s to
+the physical page to which the address of the sender&apos;s points, with the
+permission status sent from the sender, as a result the receiver will
+share this physical page with the sender.</p>
+<p>In the view of the user environments, the receiver simply make the
+receiver system call and waits for a sender, while the sender will
+repeatedly make the sender system call until the target environment
+receives the message or it encounters a unrecoverable failure.</p>
 
     </div>
 
@@ -353,7 +517,18 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LAB4-PREEMPTIVE-MULTITASKING"><span class="nav-number">1.</span> <span class="nav-text">LAB4, PREEMPTIVE MULTITASKING</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Multiprocessor-Support-and-Cooperative-Multitasking"><span class="nav-number">1.1.</span> <span class="nav-text">Multiprocessor Support and Cooperative Multitasking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Multiprocessor-Support-amp-Application-Processor-Bootstrap-amp-Question-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">Multiprocessor Support &amp; Application Processor Bootstrap &amp; Question 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Per-CPU-State-and-Initialization"><span class="nav-number">1.1.2.</span> <span class="nav-text">Per-CPU State and Initialization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Locking-amp-Question-2"><span class="nav-number">1.1.3.</span> <span class="nav-text">Locking &amp; Question 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Round-Robin-Scheduling-amp-Question-3-4"><span class="nav-number">1.1.4.</span> <span class="nav-text">Round-Robin Scheduling &amp; Question 3,4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Challenge-Fixed-priority-Scheduler"><span class="nav-number">1.1.5.</span> <span class="nav-text">Challenge: Fixed-priority Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#System-Calls-for-Environment-Creation"><span class="nav-number">1.1.6.</span> <span class="nav-text">System Calls for Environment Creation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Copy-on-Write-Fork"><span class="nav-number">1.2.</span> <span class="nav-text">Copy-on-Write Fork</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Invoking-the-User-Page-Fault-Handler-amp-User-mode-Page-Fault-Entrypoint"><span class="nav-number">1.2.1.</span> <span class="nav-text">Invoking the User Page Fault Handler &amp; User-mode Page Fault Entrypoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementing-Copy-on-Write-Fork"><span class="nav-number">1.2.2.</span> <span class="nav-text">Implementing Copy-on-Write Fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Challenge-sfork"><span class="nav-number">1.2.3.</span> <span class="nav-text">Challenge: sfork()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Preemptive-Multitasking-and-Inter-Process-Communication-IPC"><span class="nav-number">1.3.</span> <span class="nav-text">Preemptive Multitasking and Inter-Process Communication (IPC)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clock-Interrupts-and-Preemption"><span class="nav-number">1.3.1.</span> <span class="nav-text">Clock Interrupts and Preemption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inter-Process-Communication-IPC"><span class="nav-number">1.3.2.</span> <span class="nav-text">Inter-Process Communication (IPC)</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lab4-preemptive-multitasking"><span class="nav-number">1.</span> <span class="nav-text">LAB4, PREEMPTIVE MULTITASKING</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#multiprocessor-support-and-cooperative-multitasking"><span class="nav-number">1.1.</span> <span class="nav-text">Multiprocessor
+Support and Cooperative Multitasking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#multiprocessor-support-application-processor-bootstrap-question-1"><span class="nav-number">1.1.1.</span> <span class="nav-text">Multiprocessor
+Support &amp; Application Processor Bootstrap &amp; Question 1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#per-cpu-state-and-initialization"><span class="nav-number">1.1.2.</span> <span class="nav-text">Per-CPU State and
+Initialization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#locking-question-2"><span class="nav-number">1.1.3.</span> <span class="nav-text">Locking &amp; Question 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#round-robin-scheduling-question-34"><span class="nav-number">1.1.4.</span> <span class="nav-text">Round-Robin Scheduling &amp;
+Question 3,4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#challenge-fixed-priority-scheduler"><span class="nav-number">1.1.5.</span> <span class="nav-text">Challenge: Fixed-priority
+Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#system-calls-for-environment-creation"><span class="nav-number">1.1.6.</span> <span class="nav-text">System Calls for
+Environment Creation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy-on-write-fork"><span class="nav-number">1.2.</span> <span class="nav-text">Copy-on-Write Fork</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#invoking-the-user-page-fault-handler-user-mode-page-fault-entrypoint"><span class="nav-number">1.2.1.</span> <span class="nav-text">Invoking
+the User Page Fault Handler &amp; User-mode Page Fault Entrypoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#implementing-copy-on-write-fork"><span class="nav-number">1.2.2.</span> <span class="nav-text">Implementing Copy-on-Write
+Fork</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#challenge-sfork"><span class="nav-number">1.2.3.</span> <span class="nav-text">Challenge: sfork()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#preemptive-multitasking-and-inter-process-communication-ipc"><span class="nav-number">1.3.</span> <span class="nav-text">Preemptive
+Multitasking and Inter-Process Communication (IPC)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clock-interrupts-and-preemption"><span class="nav-number">1.3.1.</span> <span class="nav-text">Clock Interrupts and
+Preemption</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inter-process-communication-ipc"><span class="nav-number">1.3.2.</span> <span class="nav-text">Inter-Process Communication
+(IPC)</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -369,20 +544,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
