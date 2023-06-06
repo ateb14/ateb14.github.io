@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995) What is this paper talking about? This is a definition paper that introduces a new kind of kern">
+  <meta name="description" content="Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995)What is this paper talking about?This is a definition paper that introduces a new kind of kernel">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Exokernel">
 <meta property="og:url" content="http://ateb14.github.io/2022/11/09/Exokernel/index.html">
 <meta property="og:site_name" content="Yiyang Wang&#39;s Blog">
-<meta property="og:description" content="Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995) What is this paper talking about? This is a definition paper that introduces a new kind of kern">
+<meta property="og:description" content="Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995)What is this paper talking about?This is a definition paper that introduces a new kind of kernel">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-09T15:33:11.000Z">
 <meta property="article:modified_time" content="2022-11-13T09:03:20.566Z">
 <meta property="article:author" content="Yiyang Wang">
-<meta property="article:tag" content="paper reading">
 <meta property="article:tag" content="operating system">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://ateb14.github.io/2022/11/09/Exokernel/">
@@ -216,99 +216,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="write-up-for-exokernel-an-operating-system-architecture-for-application-level-resource-management1995">Write
-up for <em>Exokernel: An Operating System Architecture for
-Application-Level Resource Management</em>(1995)</h1>
-<h2 id="what-is-this-paper-talking-about">What is this paper talking
-about?</h2>
-<p>This is a definition paper that introduces a new kind of kernel,
-exokernel, which is quite different from the traditional kernels for
-that it exports almost all the physical resources to the untrusted user
-libraries in a secure way, by which the physical recourses are protected
-and are revokable. User library systems can implement, for example,
-virtual memory mechanism and user-defined exception handlers based on
-their demands.</p>
-<h2 id="what-is-the-motivation">What is the motivation?</h2>
-<p>The traditional operating systems manage the physical resources and
-provides high-level abstractions for user programs, which are usually
-built-in privileged programs that fully manipulate all the physical
-resources and are shard by all users, and therefore making them
-impossible to get changed by user programs. Although these high-level
-abstractions separate the physical resouces from users&apos; view and thus
-makes them easier to manage and much safer for use, they leave no space
-for users to make some adjustments to make full use of the physical
-resources, which will bring down the performance due to both the cost of
-abstractions and the low flexibility for users to exploit the physical
-resources directly. Therefore, exokernel manages to lower these costs of
-abstractions by exporting the physical resources to user libraries in a
-secure way.</p>
-<h2 id="geneal-ideas">Geneal Ideas</h2>
-<p>The design of exokernel comes from a simple observation that
-low-level primitives can be implemented in more efficient ways, as well
-as that low-level primitives are much more extensible for the
-higher-level abstractions to be implemented on. Exokernel manages to
-grant the library systems the maximum freedom to manipulate the physical
-resources, while protecting them from each other for which errors in a
-library system are ought not to affects other systems, by separating
-protection from management.</p>
-<p>In order to achieve the separation, exokernel is implemented with a
-secure bindings mechanism which tracks the ownership of resources and
-perform protections on binding points and all usages, a visible
-revocation protocol allowing library systems to participate in the
-resource revocations, and an abort protocol through which exokernel
-breaks secure bindings owned by uncooperative library systems by
-force.</p>
-<p>User library systems, ExOS demonstrated in this paper for example,
-are able to fully exploit the physical resources as what they want to,
-for almost all the necessary hardware information is delivered to them
-from exokernel.</p>
-<h2 id="benefits">Benefits</h2>
-<ul>
-<li>The low-level primitives are much more efficient than that of the
-traditional kernels, for they only require several instructions to be
-performed, as shown in the experiment results displayed in this paper
-that the cost for exokernel to dispatch an exception is relatively minor
-to that of Ultrix, a mature monolithic OS.</li>
-<li>Abstractions of the traditional kernels can be implemented
-efficiently on the user library systems, one possible reason for which
-is that kernel transitions are eliminated because abstractions are
-implemented at application level, and another reason may be that
-application-level abstractions can be implemented in ways that are not
-supported by the traditional kernels.</li>
-<li>Special-purpose implementations of abstractions are accessible to
-user programs by changing or modifying the library systems used in
-exokernel. As we know that, traditional kernels that implement
-high-level abstractions need to make a trade-off among various cases, so
-the abstractions are quite general, i.e. they focus on the average
-performance of multiple cases rather than that of some specific cases
-that are clear to the user programs and the user programs may suffer
-from the cost of the general abstractions. Therefore, the extensibility
-of exokernel allows user programs to gain from specific abstractions of
-library systems that best fit to them.</li>
+        <h1 id="Write-up-for-Exokernel-An-Operating-System-Architecture-for-Application-Level-Resource-Management-1995"><a href="#Write-up-for-Exokernel-An-Operating-System-Architecture-for-Application-Level-Resource-Management-1995" class="headerlink" title="Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995)"></a>Write up for <em>Exokernel: An Operating System Architecture for Application-Level Resource Management</em>(1995)</h1><h2 id="What-is-this-paper-talking-about"><a href="#What-is-this-paper-talking-about" class="headerlink" title="What is this paper talking about?"></a>What is this paper talking about?</h2><p>This is a definition paper that introduces a new kind of kernel, exokernel, which is quite different from the traditional kernels for that it exports almost all the physical resources to the untrusted user libraries in a secure way, by which the physical recourses are protected and are revokable. User library systems can implement, for example, virtual memory mechanism and user-defined exception handlers based on their demands.</p>
+<h2 id="What-is-the-motivation"><a href="#What-is-the-motivation" class="headerlink" title="What is the motivation?"></a>What is the motivation?</h2><p>The traditional operating systems manage the physical resources and provides high-level abstractions for user programs, which are usually built-in privileged programs that fully manipulate all the physical resources and are shard by all users, and therefore making them impossible to get changed by user programs. Although these high-level abstractions separate the physical resouces from users&#x2019; view and thus makes them easier to manage and much safer for use, they leave no space for users to make some adjustments to make full use of the physical resources, which will bring down the performance due to both the cost of abstractions and the low flexibility for users to exploit the physical resources directly. Therefore, exokernel manages to lower these costs of abstractions by exporting the physical resources to user libraries in a secure way.</p>
+<h2 id="Geneal-Ideas"><a href="#Geneal-Ideas" class="headerlink" title="Geneal Ideas"></a>Geneal Ideas</h2><p>The design of exokernel comes from a simple observation that low-level primitives can be implemented in more efficient ways, as well as that low-level primitives are much more extensible for the higher-level abstractions to be implemented on. Exokernel manages to grant the library systems the maximum freedom to manipulate the physical resources, while protecting them from each other for which errors in a library system are ought not to affects other systems, by separating protection from management.</p>
+<p>In order to achieve the separation, exokernel is implemented with a secure bindings mechanism which tracks the ownership of resources and perform protections on binding points and all usages, a visible revocation protocol allowing library systems to participate in the resource revocations, and an abort protocol through which exokernel breaks secure bindings owned by uncooperative library systems by force.</p>
+<p>User library systems, ExOS demonstrated in this paper for example, are able to fully exploit the physical resources as what they want to, for almost all the necessary hardware information is delivered to them from exokernel. </p>
+<h2 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h2><ul>
+<li>The low-level primitives are much more efficient than that of the traditional kernels, for they only require several instructions to be performed, as shown in the experiment results displayed in this paper that the cost for exokernel to dispatch an exception is relatively minor to that of Ultrix, a mature monolithic OS.</li>
+<li>Abstractions of the traditional kernels can be implemented efficiently on the user library systems, one possible reason for which is that kernel transitions are eliminated because abstractions are implemented at application level, and another reason may be that application-level abstractions can be implemented in ways that are not supported by the traditional kernels.</li>
+<li>Special-purpose implementations of abstractions are accessible to user programs by changing or modifying the library systems used in exokernel. As we know that, traditional kernels that implement high-level abstractions need to make a trade-off among various cases, so the abstractions are quite general, i.e. they focus on the average performance of multiple cases rather than that of some specific cases that are clear to the user programs and the user programs may suffer from the cost of the general abstractions. Therefore, the extensibility of exokernel allows user programs to gain from specific abstractions of library systems that best fit to them.</li>
 </ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>The abstractions are implemented at user level, which is quite
-contradictory to the design philosophy of the traditional kernels and
-thus is unfamiliar to most programmers, making it difficult to develop
-and maintain.</li>
-<li>It&apos;s hard to maintain the compatibility between different library
-systems, as they are not proposed as a whole system, which means that
-different library systems may have distinct purposes and they may
-conflict with each other.</li>
+<h2 id="Drawbacks"><a href="#Drawbacks" class="headerlink" title="Drawbacks"></a>Drawbacks</h2><ul>
+<li>The abstractions are implemented at user level, which is quite contradictory to the design philosophy of the traditional kernels and thus is unfamiliar to most programmers, making it difficult to develop and maintain.</li>
+<li>It&#x2019;s hard to maintain the compatibility between different library systems, as they are not proposed as a whole system, which means that different library systems may have distinct purposes and they may conflict with each other.</li>
 </ul>
-<h2 id="conclusions">Conclusions</h2>
-<p>Abstractions definitely raise costs, but only the user programs are
-clear about what kind of abstractions they want for the best
-performances, so exokernel transfer the power of building abstractions
-to user libraries which enables users to select the right abstractions
-they need to lower the cost of abstractions as much as possible and make
-full use of the physical resources. This philosophy is widely used in
-different domain, for example, domain-specific-architectures in computer
-architecture. If we just want the machine to simply execute our specific
-tasks at all its exertions instead of taking all the general tasks into
-consideration, the design logic of exokernel is worthwhile being taken
-account of.</p>
+<h2 id="Conclusions"><a href="#Conclusions" class="headerlink" title="Conclusions"></a>Conclusions</h2><p>Abstractions definitely raise costs, but only the user programs are clear about what kind of abstractions they want for the best performances, so exokernel transfer the power of building abstractions to user libraries which enables users to select the right abstractions they need to lower the cost of abstractions as much as possible and make full use of the physical resources. This philosophy is widely used in different domain, for example, domain-specific-architectures in computer architecture. If we just want the machine to simply execute our specific tasks at all its exertions instead of taking all the general tasks into consideration, the design logic of exokernel is worthwhile being taken account of.</p>
 
     </div>
 
@@ -318,8 +240,8 @@ account of.</p>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
               <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
           </div>
 
         
@@ -393,10 +315,7 @@ account of.</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#write-up-for-exokernel-an-operating-system-architecture-for-application-level-resource-management1995"><span class="nav-number">1.</span> <span class="nav-text">Write
-up for Exokernel: An Operating System Architecture for
-Application-Level Resource Management(1995)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking
-about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#geneal-ideas"><span class="nav-number">1.3.</span> <span class="nav-text">Geneal Ideas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benefits"><span class="nav-number">1.4.</span> <span class="nav-text">Benefits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drawbacks"><span class="nav-number">1.5.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusions"><span class="nav-number">1.6.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Write-up-for-Exokernel-An-Operating-System-Architecture-for-Application-Level-Resource-Management-1995"><span class="nav-number">1.</span> <span class="nav-text">Write up for Exokernel: An Operating System Architecture for Application-Level Resource Management(1995)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geneal-Ideas"><span class="nav-number">1.3.</span> <span class="nav-text">Geneal Ideas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefits"><span class="nav-number">1.4.</span> <span class="nav-text">Benefits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Drawbacks"><span class="nav-number">1.5.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusions"><span class="nav-number">1.6.</span> <span class="nav-text">Conclusions</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

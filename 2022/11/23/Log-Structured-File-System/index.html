@@ -20,18 +20,18 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Writeup for The Design and Implementation of a Log-Structured File System(1991) What is this paper talking about? A log-structured file system, Sprite LFS, which is similar to the write-ahead logging">
+  <meta name="description" content="Writeup for The Design and Implementation of a Log-Structured File System(1991)What is this paper talking about?A log-structured file system, Sprite LFS, which is similar to the write-ahead logging me">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Log-Structured File System">
 <meta property="og:url" content="http://ateb14.github.io/2022/11/23/Log-Structured-File-System/index.html">
 <meta property="og:site_name" content="Yiyang Wang&#39;s Blog">
-<meta property="og:description" content="Writeup for The Design and Implementation of a Log-Structured File System(1991) What is this paper talking about? A log-structured file system, Sprite LFS, which is similar to the write-ahead logging">
+<meta property="og:description" content="Writeup for The Design and Implementation of a Log-Structured File System(1991)What is this paper talking about?A log-structured file system, Sprite LFS, which is similar to the write-ahead logging me">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-23T07:13:45.000Z">
 <meta property="article:modified_time" content="2022-12-10T09:25:18.738Z">
 <meta property="article:author" content="Yiyang Wang">
-<meta property="article:tag" content="paper reading">
 <meta property="article:tag" content="operating system">
+<meta property="article:tag" content="paper reading">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://ateb14.github.io/2022/11/23/Log-Structured-File-System/">
@@ -216,88 +216,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="writeup-for-the-design-and-implementation-of-a-log-structured-file-system1991">Writeup
-for <em>The Design and Implementation of a Log-Structured File
-System</em>(1991)</h1>
-<h2 id="what-is-this-paper-talking-about">What is this paper talking
-about?</h2>
-<p>A log-structured file system, Sprite LFS, which is similar to the
-write-ahead logging mechanism used in database systems is introduced in
-this paper, where the full file system is considered as a log and the
-writing operations are taken as appending contents to the log.</p>
-<h2 id="what-is-the-motivation">What is the motivation?</h2>
-<p>The larger scale of the main memory makes more files be cached in
-them, increasing the efficiency of the read requests for the disk. As a
-result, the write requests will dominate the disk traffic. Traditional
-file systems spend a lot of time on seeking the metadata for the write
-requests, which lowers the utilization of the disk bandwidth
-dramatically especially for frequently writing small files. Furthermore,
-traditional file systems tend to write the metadata stuctures
-synchronously even the blocks are written asynchronously, which bounds
-the CPU utilization. The log-structured file system aims at solving
-these problems by buffering a sequence of write requests in the file
-cache and writing all of them sequentially in a single I/O, including
-both the metadata and the file data.</p>
-<h2 id="general-ideas">General ideas</h2>
-<p>The new data scheduled to be flushed to the disk are cached in main
-memory until their amount exceeds a curtain threshold, after which the
-large collection of data is written to the disk in a single I/O to make
-full use of the disk&apos;s bandwidth. Or we can say that, it collects the
-scattered small files and writes them to the disk together periodically.
-The write operations are append-only, which means that the positions of
-the inodes aren&apos;t fixed, and thus they are recorded in an inode map.</p>
-<p>To guarantee enough spaces for a write operation, the log-structured
-file system combines both threading and copying. Organized by fixed-size
-segments which contain certain number of blocks, any given segment is
-always written sequentially from its beginning to its end, and all live
-data must be copied out of a segment before the segment can be
-rewritten. The log is threaded on a segment-by-segment basis, and the
-file system applies a reclamation policy that compacts the contents by
-segments, in which the contents of the live blocks are written out to
-the head of the log.</p>
-<p>The cost for a group of segments to be cleaned is highly relative to
-its utilization, i.e., the more blocks are alive, the higher the cost
-is. Whereas, the lower utilization indicates the lower performance, so
-the log-structured file system tries to make a tradeoff between cost and
-performance by seperating the disk into two classes, the first of which
-are nearly full, while the second has an extremely low utilization on
-which the cleaner works on.</p>
-<p>Like the database management system, the log-structured file system
-employs a checkpoint mechanism in the log to perform crash recovery, and
-it tries to recover the operations happened before an inconsistent
-checkpoint using some special logs.</p>
-<h2 id="benefits">Benefits</h2>
-<ul>
-<li>The buffering and append-only writing mechanism reduces the time to
-seek the metadata, which increases the utilization of disk bandwidth
-dramatically.</li>
-<li>Cleaning overheads are low with a simple but useful policy based on
-cost and benefit, and there is no cleaning overhead at all for very
-large files that are created and deleted in their entirety.</li>
-<li>Crash recovery is quick since the positions of the last disk
-operations are at the end of the log, which means that it&apos;s unnecessary
-to scan all the metadata structures to restore consistency.</li>
+        <h1 id="Writeup-for-The-Design-and-Implementation-of-a-Log-Structured-File-System-1991"><a href="#Writeup-for-The-Design-and-Implementation-of-a-Log-Structured-File-System-1991" class="headerlink" title="Writeup for The Design and Implementation of a Log-Structured File System(1991)"></a>Writeup for <em>The Design and Implementation of a Log-Structured File System</em>(1991)</h1><h2 id="What-is-this-paper-talking-about"><a href="#What-is-this-paper-talking-about" class="headerlink" title="What is this paper talking about?"></a>What is this paper talking about?</h2><p>A log-structured file system, Sprite LFS, which is similar to the write-ahead logging mechanism used in database systems is introduced in this paper, where the full file system is considered as a log and the writing operations are taken as appending contents to the log.</p>
+<h2 id="What-is-the-motivation"><a href="#What-is-the-motivation" class="headerlink" title="What is the motivation?"></a>What is the motivation?</h2><p>The larger scale of the main memory makes more files be cached in them, increasing the efficiency of the read requests for the disk. As a result, the write requests will dominate the disk traffic. Traditional file systems spend a lot of time on seeking the metadata for the write requests, which lowers the utilization of the disk bandwidth dramatically especially for frequently writing small files. Furthermore, traditional file systems tend to write the metadata stuctures synchronously even the blocks are written asynchronously, which bounds the CPU utilization. The log-structured file system aims at solving these problems by buffering a sequence of write requests in the file cache and writing all of them sequentially in a single I/O, including both the metadata and the file data.</p>
+<h2 id="General-ideas"><a href="#General-ideas" class="headerlink" title="General ideas"></a>General ideas</h2><p>The new data scheduled to be flushed to the disk are cached in main memory until their amount exceeds a curtain threshold, after which the large collection of data is written to the disk in a single I/O to make full use of the disk&#x2019;s bandwidth. Or we can say that, it collects the scattered small files and writes them to the disk together periodically. The write operations are append-only, which means that the positions of the inodes aren&#x2019;t fixed, and thus they are recorded in an inode map.</p>
+<p>To guarantee enough spaces for a write operation, the log-structured file system combines both threading and copying. Organized by fixed-size segments which contain certain number of blocks, any given segment is always written sequentially from its beginning to its end, and all live data must be copied out of a segment before the segment can be rewritten. The log is threaded on a segment-by-segment basis, and the file system applies a reclamation policy that compacts the contents by segments, in which the contents of the live blocks are written out to the head of the log.</p>
+<p>The cost for a group of segments to be cleaned is highly relative to its utilization, i.e., the more blocks are alive, the higher the cost is. Whereas, the lower utilization indicates the lower performance, so the log-structured file system tries to make a tradeoff between cost and performance by seperating the disk into two classes, the first of which are nearly full, while the second has an extremely low utilization on which the cleaner works on.</p>
+<p>Like the database management system, the log-structured file system employs a checkpoint mechanism in the log to perform crash recovery, and it tries to recover the operations happened before an inconsistent checkpoint using some special logs.</p>
+<h2 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h2><ul>
+<li>The buffering and append-only writing mechanism reduces the time to seek the metadata, which increases the utilization of disk bandwidth dramatically.</li>
+<li>Cleaning overheads are low with a simple but useful policy based on cost and benefit, and there is no cleaning overhead at all for very large files that are created and deleted in their entirety.</li>
+<li>Crash recovery is quick since the positions of the last disk operations are at the end of the log, which means that it&#x2019;s unnecessary to scan all the metadata structures to restore consistency.</li>
 </ul>
-<h2 id="drawbacks">Drawbacks</h2>
-<ul>
-<li>Since the files to be writen to the disk are cached in a buffer and
-are appended to the end of the log, the file system is unable to
-reorganize them to achieve some logical locality, which indicates that a
-potential performance loss will occur when the read pattern doesn&apos;t fit
-in the temporal locality that the log creates.</li>
-<li>The log-structured file system is actually not compatible with the
-commonly used file systems, which makes it hard to grow widespread.</li>
+<h2 id="Drawbacks"><a href="#Drawbacks" class="headerlink" title="Drawbacks"></a>Drawbacks</h2><ul>
+<li>Since the files to be writen to the disk are cached in a buffer and are appended to the end of the log, the file system is unable to reorganize them to achieve some logical locality, which indicates that a potential performance loss will occur when the read pattern doesn&#x2019;t fit in the temporal locality that the log creates.</li>
+<li>The log-structured file system is actually not compatible with the commonly used file systems, which makes it hard to grow widespread.</li>
 </ul>
-<h2 id="conclusion">Conclusion</h2>
-<p>The prediction made behind the log-structured file system that the
-scale of the main memory will make the disk traffic be dominated by
-write requests are proved to be correct nowadays, which highlights the
-idea of buffering the small file write requests. What&apos;s more, the
-cleaning mechanism is quite similar to the physical attributes of the
-SSD, where a block must be erased before being written again, so I
-suppose that the general ideas of the log-structured file system are
-also useful in SSD hardware design. In conclusion, the idea of this file
-system is still inspiring today from my perspective.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>The prediction made behind the log-structured file system that the scale of the main memory will make the disk traffic be dominated by write requests are proved to be correct nowadays, which highlights the idea of buffering the small file write requests. What&#x2019;s more, the cleaning mechanism is quite similar to the physical attributes of the SSD, where a block must be erased before being written again, so I suppose that the general ideas of the log-structured file system are also useful in SSD hardware design. In conclusion, the idea of this file system is still inspiring today from my perspective.</p>
 
     </div>
 
@@ -307,8 +241,8 @@ system is still inspiring today from my perspective.</p>
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
               <a href="/tags/operating-system/" rel="tag"># operating system</a>
+              <a href="/tags/paper-reading/" rel="tag"># paper reading</a>
           </div>
 
         
@@ -382,10 +316,7 @@ system is still inspiring today from my perspective.</p>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#writeup-for-the-design-and-implementation-of-a-log-structured-file-system1991"><span class="nav-number">1.</span> <span class="nav-text">Writeup
-for The Design and Implementation of a Log-Structured File
-System(1991)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking
-about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#what-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#general-ideas"><span class="nav-number">1.3.</span> <span class="nav-text">General ideas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#benefits"><span class="nav-number">1.4.</span> <span class="nav-text">Benefits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#drawbacks"><span class="nav-number">1.5.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-number">1.6.</span> <span class="nav-text">Conclusion</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Writeup-for-The-Design-and-Implementation-of-a-Log-Structured-File-System-1991"><span class="nav-number">1.</span> <span class="nav-text">Writeup for The Design and Implementation of a Log-Structured File System(1991)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-this-paper-talking-about"><span class="nav-number">1.1.</span> <span class="nav-text">What is this paper talking about?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-the-motivation"><span class="nav-number">1.2.</span> <span class="nav-text">What is the motivation?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#General-ideas"><span class="nav-number">1.3.</span> <span class="nav-text">General ideas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benefits"><span class="nav-number">1.4.</span> <span class="nav-text">Benefits</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Drawbacks"><span class="nav-number">1.5.</span> <span class="nav-text">Drawbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">1.6.</span> <span class="nav-text">Conclusion</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
