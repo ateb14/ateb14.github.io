@@ -237,147 +237,6 @@ I&apos;ve learnt and maybe some other things.</p>
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2023/06/08/Sliced%20Score%20Matching/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/wyy.jpeg">
-      <meta itemprop="name" content="WANG YIYANG">
-      <meta itemprop="description" content="A junior student from the School of EECS, Peking University.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WANG YIYANG's BLOG">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/06/08/Sliced%20Score%20Matching/" class="post-title-link" itemprop="url">Sliced Score Matching</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:00:11" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Generative-Models/" itemprop="url" rel="index"><span itemprop="name">Generative Models</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="sliced-score-matching">Sliced Score Matching</h1>
-<p>Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags:
-Technique</p>
-<h1 id="background">Background</h1>
-<p>The optimization object of score matching is</p>
-<p><span class="math display">\[
-\begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))]d\bold{x}
-\\&amp;= \mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))] \\&amp;=
-\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||s_\theta(x)||^2 +
-tr(\nabla_\bold{x}s_\theta (\bold{x}))].\end{aligned}
-\]</span></p>
-<p>Derivation of score matching can be found on <a target="_blank" rel="noopener" href="https://www.notion.so/Score-Matching-8de16bc8c87d44a4a0eb167c11b02d88?pvs=21">Score
-Matching</a>.</p>
-<p>However, naive score matching is NOT scalable. Suppose that we train
-a deep neural network which outputs a d-dimension vector as the
-estimation of the score function. Computing <span class="math inline">\(tr(\nabla_\bf{x}s_\theta(\bf{x}))\)</span>
-requires <span class="math inline">\(O(d)\)</span> backpropagation since
-we have to calculate</p>
-<p><span class="math display">\[
-\{ \frac{\partial s_{\theta,i}(x)}{\partial x_i}| i\in\{1,2,...,d\}\}.
-\]</span></p>
-<h1 id="sliced-score-matching-1">Sliced Score Matching</h1>
-<p>Project the score function onto random vectors <span class="math inline">\(\bf{v}\)</span>, which introduces the Sliced
-Fisher Divergence:</p>
-<p><span class="math display">\[
-\frac{1}{2}\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
-p(x)}[||\bold{v}^T\nabla_{\bold{x}}\log
-p_\theta(\bold{x})-\bold{v}^T\nabla_{\bold{x}}\log p(\bold{x})||^2] \\ =
-\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
-p(x)}[\bold{v}^T\nabla_{\bold{x}}^2\log p_\theta(\bold{x})\bold{v}+
-\frac{1}{2}[\bold{v}^T\nabla_{\bold{x}}\log p_\theta(\bold{x})]^2] +
-const
-\]</span></p>
-<p>When selecting the distribution <span class="math inline">\(p(\bf{z})\)</span>, there is flexibility to choose
-options such as a multivariate standard normal <span class="math inline">\(N(0, I)\)</span> or a multivariate Rademacher
-distribution (which is the uniform distribution over <span class="math inline">\(\{&#xB1;1\}^D\)</span>).</p>
-<p>In practice, when working with a dataset <span class="math inline">\(X^N = \{\bf{x}_1, \bf{x}_2,...,\bf{x}_n
-\}\)</span><em>,</em> we draw <em><span class="math inline">\(M\)</span></em> random projections from <span class="math inline">\(p_\bf{v}\)</span> for each point <span class="math inline">\(\bf{x}_i\)</span> independently. The collection of
-all these vectors are denoted by <span class="math inline">\(V^{NM} = \{
-\bf{v}_{ij}\}_{1\le i\le N, 1\le j\le M}\)</span>. The estimator can be
-defined as{</p>
-<p><span class="math display">\[
-\hat{J}(\theta;X^N,V^{NM}) =
-\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bold{v}_{i,j}^T\nabla_\bold{x}s(\bold{x};\theta)\bold{v}_{ij}
-+\frac{1}{2}\bold{v}_{ij}^Ts(\bold{x};\theta))^2]
-\]</span></p>
-<p>When <span class="math inline">\(p_{\bf{v}}\)</span> is a
-multivariate standard normal or multivariate Rademacher distribution, we
-have</p>
-<p><span class="math inline">\(\mathbb{E}_{\bf{z}\sim
-p(\bf{z})}[(\bf{v}_{ij}^Ts(\bf{x};\theta))^2] =
-||s(\bf{x};\theta)||^2_2\)</span>, which may lead to a simplified
-estimator with lower variance:</p>
-<p><span class="math display">\[
-\hat{J}_{vr}(\theta;X^N,V^{NM}) =
-\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bold{v}_{i,j}^T\nabla_\bold{x}s(\bold{x};\theta)\bold{v}_{ij}
-+\frac{1}{2}||s(\bold{x};\theta)||_2^2]
-\]</span></p>
-<p>The author refers to this version as sliced score matching with
-variance reduction(SSM-VR), and it has better performance
-empirically.</p>
-<p>If we train a neural network <span class="math inline">\(h_\theta(\bf{x})\)</span> to predict the score
-function, then we only need <span class="math inline">\(O(1)\)</span>
-backpropagation to calculate <span class="math inline">\(\nabla_{\bf{x}}[\bf{v}^Th_{\theta}(\bf{x})]
-=\bf{v}^T\nabla_{\bf{x}}h_{\theta}(\bf{x})\)</span> .</p>
-<h1 id="reference">Reference</h1>
-<p>[1] Song et al(2019). Sliced Score Matching: A Scalable Approach to
-Density and Score Estimation.</p>
-<p>Websites:</p>
-<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=lapaQrdYIWg">July 23rd 6
-Sliced Score Matching A Scalable Approach to Density and Score
-Estimation</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2023/06/08/Probability%20Flow%20ODE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -403,7 +262,7 @@ Estimation</a></p>
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:00:16" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
+              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:03:42" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -430,7 +289,7 @@ Estimation</a></p>
 <h1 id="definition">Definition</h1>
 <p>Consider the following SDE:</p>
 <p><span class="math display">\[
-d\bold{x} = \bold{f}(\bold{x},t)dt + \bold{G}(\bold{x},t)d\bold{w},
+d\bf{x} = \bf{f}(\bf{x},t)dt + \bf{G}(\bf{x},t)d\bf{w},
 \]</span></p>
 <p>where <span class="math inline">\(\bf{f}(\cdot,t): \mathbb{R}^d
 \rightarrow \mathbb{R}^d, \bf{G}(\cdot,t): \mathbb{R}^d \rightarrow
@@ -439,22 +298,21 @@ d\bold{x} = \bold{f}(\bold{x},t)dt + \bold{G}(\bold{x},t)d\bold{w},
 ODE is equivalent to the marginal probability density <span class="math inline">\(p_t(\bf{x})\)</span> that is generated by the SDE
 mentioned above.</p>
 <p><span class="math display">\[
-d\bold{x} =
-\bold{\widetilde{f}}(\bold{x},t)dt,\\  \bold{\widetilde{f}}(\bold{x},t)
-= \bold{f}(\bold{x},t) -
-\frac{1}{2}\nabla\cdot[\bold{G}(\bold{x},t)\bold{G}(\bold{x},t)^T] -
-\frac{1}{2}\bold{G}(\bold{x},t)\bold{G}(\bold{x},t)^T\nabla_{x}\log
-p_t(\bold{x})
+d\bf{x} =
+\bf{\widetilde{f}}(\bf{x},t)dt,\\  \bf{\widetilde{f}}(\bf{x},t) =
+\bf{f}(\bf{x},t) -
+\frac{1}{2}\nabla\cdot[\bf{G}(\bf{x},t)\bf{G}(\bf{x},t)^T] -
+\frac{1}{2}\bf{G}(\bf{x},t)\bf{G}(\bf{x},t)^T\nabla_{x}\log p_t(\bf{x})
 \]</span></p>
 <h1 id="application-in-sde-driven-diffusion">Application in SDE Driven
 Diffusion</h1>
 <p>For a simplified forward process SDE used in SMLD:</p>
 <p><span class="math display">\[
-d\bold{x} = \bold{f}_t(x)dt+g_td\bold{w}.
+d\bf{x} = \bf{f}_t(x)dt+g_td\bf{w}.
 \]</span></p>
 <p>Its probability flow ODEs is:</p>
 <p><span class="math display">\[
-d\bold{x} = [\bold{f}_t(x)-\frac{1}{2}g_t^2\nabla_x \log p_t(x)]dt.
+d\bf{x} = [\bf{f}_t(x)-\frac{1}{2}g_t^2\nabla_x \log p_t(x)]dt.
 \]</span></p>
 <p>And the reverse SDE(ODE) for it is also <span class="math inline">\(d\bf{x} = [\bf{f}_t(x)-\frac{1}{2}g_t^2\nabla_x
 \log p_t(x)]dt\)</span> .</p>
@@ -521,14 +379,13 @@ sampling process is actually a special case of Probability Flow ODE.</p>
 <p>The marginal probability density evolves according to Kolmogorov&#x2019;s
 forward equation (Fokker-Planck equation)</p>
 <p><span class="math display">\[
-\frac{\partial p_t(\bold{x})}{\partial t} =
--\sum_{i=1}^{d}\frac{\partial}{\partial
-x_i}[f_i(\bold{x},t)p_t(\bold{x})] +
+\frac{\partial p_t(\bf{x})}{\partial t} =
+-\sum_{i=1}^{d}\frac{\partial}{\partial x_i}[f_i(\bf{x},t)p_t(\bf{x})] +
 \frac{1}{2}\sum_{i=1}^{d}\sum_{j=1}^{d}\frac{\partial ^2}{\partial x_i
-\partial x_j}[p_t(\bold{x})G^i(\bold{x},t)G^j(\bold{x},t)^T],\\
-G(\bold{x},t) = \begin{bmatrix}
-G^1(\bold{x},t) \\ ...\\
-G^d(\bold{x},t)
+\partial x_j}[p_t(\bf{x})G^i(\bf{x},t)G^j(\bf{x},t)^T],\\ G(\bf{x},t) =
+\begin{bmatrix}
+G^1(\bf{x},t) \\ ...\\
+G^d(\bf{x},t)
 \end{bmatrix}
 \]</span></p>
 <p>to be continued</p>
@@ -540,6 +397,146 @@ Stochastic Differential Equations.</p>
 flow ODE&#xFF09;</a></p>
 <p><a target="_blank" rel="noopener" href="https://kexue.fm/archives/9228">&#x751F;&#x6210;&#x6269;&#x6563;&#x6A21;&#x578B;&#x6F2B;&#x8C08;&#xFF08;&#x516D;&#xFF09;&#xFF1A;&#x4E00;&#x822C;&#x6846;&#x67B6;&#x4E4B;ODE&#x7BC7;
 - &#x79D1;&#x5B66;&#x7A7A;&#x95F4;|Scientific Spaces</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2023/06/08/Sliced%20Score%20Matching/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/wyy.jpeg">
+      <meta itemprop="name" content="WANG YIYANG">
+      <meta itemprop="description" content="A junior student from the School of EECS, Peking University.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WANG YIYANG's BLOG">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/06/08/Sliced%20Score%20Matching/" class="post-title-link" itemprop="url">Sliced Score Matching</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:03:09" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Generative-Models/" itemprop="url" rel="index"><span itemprop="name">Generative Models</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="sliced-score-matching">Sliced Score Matching</h1>
+<p>Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags:
+Technique</p>
+<h1 id="background">Background</h1>
+<p>The optimization object of score matching is</p>
+<p><span class="math display">\[
+\begin{aligned} \int &amp;p(\bf{x})[\frac{1}{2}||\nabla_x\log p_\theta
+(\bf{x})||^2 + tr(\nabla_x^2\log p_\theta (\bf{x}))]d\bf{x} \\&amp;=
+\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta (\bf{x})||^2
++ tr(\nabla_x^2\log p_\theta (\bf{x}))] \\&amp;= \mathbb{E}_{x\sim
+p(x)}[\frac{1}{2}||s_\theta(x)||^2 + tr(\nabla_\bf{x}s_\theta
+(\bf{x}))].\end{aligned}
+\]</span></p>
+<p>Derivation of score matching can be found on <a target="_blank" rel="noopener" href="https://www.notion.so/Score-Matching-8de16bc8c87d44a4a0eb167c11b02d88?pvs=21">Score
+Matching</a>.</p>
+<p>However, naive score matching is NOT scalable. Suppose that we train
+a deep neural network which outputs a d-dimension vector as the
+estimation of the score function. Computing <span class="math inline">\(tr(\nabla_\bf{x}s_\theta(\bf{x}))\)</span>
+requires <span class="math inline">\(O(d)\)</span> backpropagation since
+we have to calculate</p>
+<p><span class="math display">\[
+\{ \frac{\partial s_{\theta,i}(x)}{\partial x_i}| i\in\{1,2,...,d\}\}.
+\]</span></p>
+<h1 id="sliced-score-matching-1">Sliced Score Matching</h1>
+<p>Project the score function onto random vectors <span class="math inline">\(\bf{v}\)</span>, which introduces the Sliced
+Fisher Divergence:</p>
+<p><span class="math display">\[
+\frac{1}{2}\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
+p(x)}[||\bf{v}^T\nabla_{\bf{x}}\log
+p_\theta(\bf{x})-\bf{v}^T\nabla_{\bf{x}}\log p(\bf{x})||^2] \\ =
+\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
+p(x)}[\bf{v}^T\nabla_{\bf{x}}^2\log p_\theta(\bf{x})\bf{v}+
+\frac{1}{2}[\bf{v}^T\nabla_{\bf{x}}\log p_\theta(\bf{x})]^2] + const
+\]</span></p>
+<p>When selecting the distribution <span class="math inline">\(p(\bf{z})\)</span>, there is flexibility to choose
+options such as a multivariate standard normal <span class="math inline">\(N(0, I)\)</span> or a multivariate Rademacher
+distribution (which is the uniform distribution over <span class="math inline">\(\{&#xB1;1\}^D\)</span>).</p>
+<p>In practice, when working with a dataset <span class="math inline">\(X^N = \{\bf{x}_1, \bf{x}_2,...,\bf{x}_n
+\}\)</span><em>,</em> we draw <em><span class="math inline">\(M\)</span></em> random projections from <span class="math inline">\(p_\bf{v}\)</span> for each point <span class="math inline">\(\bf{x}_i\)</span> independently. The collection of
+all these vectors are denoted by <span class="math inline">\(V^{NM} = \{
+\bf{v}_{ij}\}_{1\le i\le N, 1\le j\le M}\)</span>. The estimator can be
+defined as{</p>
+<p><span class="math display">\[
+\hat{J}(\theta;X^N,V^{NM}) =
+\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bf{v}_{i,j}^T\nabla_\bf{x}s(\bf{x};\theta)\bf{v}_{ij}
++\frac{1}{2}\bf{v}_{ij}^Ts(\bf{x};\theta))^2]
+\]</span></p>
+<p>When <span class="math inline">\(p_{\bf{v}}\)</span> is a
+multivariate standard normal or multivariate Rademacher distribution, we
+have</p>
+<p><span class="math inline">\(\mathbb{E}_{\bf{z}\sim
+p(\bf{z})}[(\bf{v}_{ij}^Ts(\bf{x};\theta))^2] =
+||s(\bf{x};\theta)||^2_2\)</span>, which may lead to a simplified
+estimator with lower variance:</p>
+<p><span class="math display">\[
+\hat{J}_{vr}(\theta;X^N,V^{NM}) =
+\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bf{v}_{i,j}^T\nabla_\bf{x}s(\bf{x};\theta)\bf{v}_{ij}
++\frac{1}{2}||s(\bf{x};\theta)||_2^2]
+\]</span></p>
+<p>The author refers to this version as sliced score matching with
+variance reduction(SSM-VR), and it has better performance
+empirically.</p>
+<p>If we train a neural network <span class="math inline">\(h_\theta(\bf{x})\)</span> to predict the score
+function, then we only need <span class="math inline">\(O(1)\)</span>
+backpropagation to calculate <span class="math inline">\(\nabla_{\bf{x}}[\bf{v}^Th_{\theta}(\bf{x})]
+=\bf{v}^T\nabla_{\bf{x}}h_{\theta}(\bf{x})\)</span> .</p>
+<h1 id="reference">Reference</h1>
+<p>[1] Song et al(2019). Sliced Score Matching: A Scalable Approach to
+Density and Score Estimation.</p>
+<p>Websites:</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=lapaQrdYIWg">July 23rd 6
+Sliced Score Matching A Scalable Approach to Density and Score
+Estimation</a></p>
 
       
     </div>
@@ -584,7 +581,7 @@ flow ODE&#xFF09;</a></p>
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-06-08 12:00:04 / Modified: 15:59:34" itemprop="dateCreated datePublished" datetime="2023-06-08T12:00:04+08:00">2023-06-08</time>
+              <time title="Created: 2023-06-08 12:00:04 / Modified: 16:03:55" itemprop="dateCreated datePublished" datetime="2023-06-08T12:00:04+08:00">2023-06-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -613,18 +610,18 @@ flow ODE&#xFF09;</a></p>
 Flow ODE</a></p>
 <p>Consider the following SDE used in diffusion model:</p>
 <p><span class="math display">\[
-d\bf{x_t} = \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}.
+d\bf{x_t} = \bf{\mu}(\bf{x_t},t)dt+\sigma(t)\bf{w}.
 \]</span></p>
 <p>A probability flow ODE(PF ODE) shares the same marginal probability
 distribution as it:</p>
 <p><span class="math display">\[
-d\bold{x_t} = [\bold{\mu}(\bold{x_t},t)-\frac{1}{2}\sigma(t)^2\nabla_x
-\log p_t(\bold{x_t})]dt.
+d\bf{x_t} = [\bf{\mu}(\bf{x_t},t)-\frac{1}{2}\sigma(t)^2\nabla_x \log
+p_t(\bf{x_t})]dt.
 \]</span></p>
 <p>In this paper, the author proposes using <span class="math inline">\(\mu(\bf{x},t) = \bf{0}\)</span> and <span class="math inline">\(\sigma(t) = \sqrt{2t}\)</span> in Karras et al.
 (2022), which results in the <em>empirical PF ODE</em>:</p>
 <p><span class="math display">\[
-\frac{d\bold{x}_t}{d_t} = -ts_\phi(\bold{x}_t,t).
+\frac{d\bf{x}_t}{d_t} = -ts_\phi(\bf{x}_t,t).
 \]</span></p>
 <h1 id="definition">Definition</h1>
 <p>Given a solution trajectory solution <span class="math inline">\(\{\bf{x}_t\}_{t\in[\epsilon,T]}\)</span> of the PF
@@ -641,8 +638,7 @@ identity function, meaning that <span class="math inline">\(\bf{f}(\bf{x}_\epsil
 networks, the author proposes using a skip link which enforces the model
 to respect the boundary condition:</p>
 <p><span class="math display">\[
-\bold{f}_\theta(\bold{x},t) = c_{skip}(t)\bold{x}
-+c_{out}F_\theta(\bold{x},t),
+\bf{f}_\theta(\bf{x},t) = c_{skip}(t)\bf{x} +c_{out}F_\theta(\bf{x},t),
 \]</span></p>
 <p>where <span class="math inline">\(c_{skip}(t)\)</span> and <span class="math inline">\(c_{out}(t)\)</span> are differentiable functions
 <span class="math inline">\(s.t.\)</span> <span class="math inline">\(c_{skip}(\epsilon)=1\)</span> and <span class="math inline">\(c_{out}(\epsilon)=0\)</span>.</p>
@@ -662,16 +658,16 @@ improved sample quality.&#x201D;</em></p>
 <h2 id="consistency-distillationcd">Consistency Distillation(CD)</h2>
 <p>Loss Function:</p>
 <p><span class="math display">\[
-\mathcal{L}_{CD}^N(\theta,\theta^-;\phi) := \mathbb{E}_{\bold{x} \sim
+\mathcal{L}_{CD}^N(\theta,\theta^-;\phi) := \mathbb{E}_{\bf{x} \sim
 p_{data}}\mathbb{E}_{n \sim
-\mathcal{U}[0,N-1]}[\lambda(n)d(\bold{f}_\theta(\bold{x}_{t_{n+1}},t_{n+1}),\bold{f}_{\theta^-}(\bold{\hat{x}}_{t_n}^\phi,t_{n}))],
+\mathcal{U}[0,N-1]}[\lambda(n)d(\bf{f}_\theta(\bf{x}_{t_{n+1}},t_{n+1}),\bf{f}_{\theta^-}(\bf{\hat{x}}_{t_n}^\phi,t_{n}))],
 \]</span></p>
 <p>where <span class="math inline">\(\bf{x}_{t_{n+1}} \sim
 \mathcal{N}(\bf{0},t_{n+1}^2)\)</span> and <span class="math inline">\(\bf{\hat{x}}_{t_n}^\phi\)</span> is estimated
 using a ODE solver given a pre-trained score model <span class="math inline">\(s_\phi(\bf{x},t)\)</span>:</p>
 <p><span class="math display">\[
-\bold{\hat{x}}_{t_n}^\phi := \bold{x}_{t_{n+1}} -
-(t_n-t_{n+1})t_{n+1}s_\phi(\bold{x}_{t_{n+1}},t_{n+1}).
+\bf{\hat{x}}_{t_n}^\phi := \bf{x}_{t_{n+1}} -
+(t_n-t_{n+1})t_{n+1}s_\phi(\bf{x}_{t_{n+1}},t_{n+1}).
 \]</span></p>
 <p><span class="math inline">\(\theta^-\)</span> denotes the running
 average(EMA) of the past arguments <span class="math inline">\(\theta\)</span> during optimization:</p>
@@ -685,14 +681,14 @@ average(EMA) of the past arguments <span class="math inline">\(\theta\)</span> d
 <h2 id="consistency-trainingct">Consistency Training(CT)</h2>
 <p>There exists an unbiased estimator of <span class="math inline">\(\nabla\log p_t(\bf{x}_t)\)</span>:</p>
 <p><span class="math display">\[
-\nabla\log p_t(\bold{x}_t) =
--\mathbb{E}_{\bold{x}_t\sim\mathcal{N}(\bold{0},t^2I)}[\frac{\bold{x}_t-\bold{x}}{t^2}].
+\nabla\log p_t(\bf{x}_t) =
+-\mathbb{E}_{\bf{x}_t\sim\mathcal{N}(\bf{0},t^2I)}[\frac{\bf{x}_t-\bf{x}}{t^2}].
 \]</span></p>
 <p>Loss Function:</p>
 <p><span class="math display">\[
-\mathcal L_{CD}^N(\theta,\theta^-;\phi) = \mathbb{E}_{\bold{x} \sim
+\mathcal L_{CD}^N(\theta,\theta^-;\phi) = \mathbb{E}_{\bf{x} \sim
 p_{data}}\mathbb{E}_{n \sim
-\mathcal{U}[0,N-1]}[\lambda(n)d(\bold{f}_\theta(\bold{x}+t_{n+1}\bold{z},t_{n+1}),\bold{f}_{\theta^-}(\bold{x}+t_{n}\bold{z},t_{n}))],
+\mathcal{U}[0,N-1]}[\lambda(n)d(\bf{f}_\theta(\bf{x}+t_{n+1}\bf{z},t_{n+1}),\bf{f}_{\theta^-}(\bf{x}+t_{n}\bf{z},t_{n}))],
 \]</span></p>
 <p>where <span class="math inline">\(z\sim \mathcal
 N(\bf{0},I)\)</span>.</p>
@@ -778,7 +774,7 @@ generation, Denoising, Interpolation&#x2026;.</strong></p>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-08 16:00:34" itemprop="dateModified" datetime="2023-06-08T16:00:34+08:00">2023-06-08</time>
+                <time title="Modified: 2023-06-08 16:04:28" itemprop="dateModified" datetime="2023-06-08T16:04:28+08:00">2023-06-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1054,16 +1050,16 @@ s_{\theta,i}(x)}{\partial(x_i)}dx_{1:n} \end{aligned}
 <p>Then the second term is:</p>
 <p><span class="math display">\[
 \begin{aligned} -\int p(x)s_\theta(x)^Ts_\theta(x) dx&amp;=\int
-p(x)tr(\nabla_\bold{x}s_\theta(x))dx_{1:n} \end{aligned}
+p(x)tr(\nabla_\bf{x}s_\theta(x))dx_{1:n} \end{aligned}
 \]</span></p>
 <p>Then the optimization object is :</p>
 <p><span class="math display">\[
-\begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))]d\bold{x}
-\\&amp;= \mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))] \\&amp;=
-\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||s_\theta(x)||^2 +
-tr(\nabla_\bold{x}s_\theta (\bold{x}))].\end{aligned}
+\begin{aligned} \int &amp;p(\bf{x})[\frac{1}{2}||\nabla_x\log p_\theta
+(\bf{x})||^2 + tr(\nabla_x^2\log p_\theta (\bf{x}))]d\bf{x} \\&amp;=
+\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta (\bf{x})||^2
++ tr(\nabla_x^2\log p_\theta (\bf{x}))] \\&amp;= \mathbb{E}_{x\sim
+p(x)}[\frac{1}{2}||s_\theta(x)||^2 + tr(\nabla_\bf{x}s_\theta
+(\bf{x}))].\end{aligned}
 \]</span></p>
 <p>Here <span class="math inline">\(\nabla_x^2\log p_\theta
 (\bf{x})\)</span> denotes the Hessian Matrix of <span class="math inline">\(\log p_\theta (\bf{x})\)</span>.</p>
@@ -1130,7 +1126,7 @@ lower bound</a></p>
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-06-08 16:00:24" itemprop="dateModified" datetime="2023-06-08T16:00:24+08:00">2023-06-08</time>
+                <time title="Modified: 2023-06-08 16:05:01" itemprop="dateModified" datetime="2023-06-08T16:05:01+08:00">2023-06-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1231,7 +1227,7 @@ subtracting the projections on previous bases), i.e. <span class="math inline">\
 Differential Equation</h2>
 <p>We try to solve this <strong>constant-coefficient</strong>
 differential equation starting from <span class="math inline">\(\bf{u}(0)\)</span>: <span class="math display">\[
-\frac{d\bold{u}}{dt} = A\bold{u}
+\frac{d\bf{u}}{dt} = A\bf{u}
 \]</span> If <span class="math inline">\(Ax = \lambda x\)</span>, we get
 <span class="math inline">\(\frac{d\bf{u}}{dt} = \lambda \bf{u}\)</span>
 when <span class="math inline">\(\bf{u} = e^{\lambda

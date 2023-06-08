@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Sliced Score Matching Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags: Technique Background The optimization object of score matching is \[ \begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\">
+  <meta name="description" content="Sliced Score Matching Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags: Technique Background The optimization object of score matching is \[ \begin{aligned} \int &amp;p(\bf{x})[\frac{1}{2}||\na">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Sliced Score Matching">
 <meta property="og:url" content="http://ateb14.github.io/2023/06/08/Sliced%20Score%20Matching/index.html">
 <meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
-<meta property="og:description" content="Sliced Score Matching Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags: Technique Background The optimization object of score matching is \[ \begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\">
+<meta property="og:description" content="Sliced Score Matching Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags: Technique Background The optimization object of score matching is \[ \begin{aligned} \int &amp;p(\bf{x})[\frac{1}{2}||\na">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-06-08T04:10:00.000Z">
-<meta property="article:modified_time" content="2023-06-08T08:00:11.907Z">
+<meta property="article:modified_time" content="2023-06-08T08:03:09.152Z">
 <meta property="article:author" content="WANG YIYANG">
 <meta property="article:tag" content="Deep Learning">
 <meta property="article:tag" content="Generative Models">
@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:00:11" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
+              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:03:09" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,12 +216,12 @@ Technique</p>
 <h1 id="background">Background</h1>
 <p>The optimization object of score matching is</p>
 <p><span class="math display">\[
-\begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))]d\bold{x}
-\\&amp;= \mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta
-(\bold{x})||^2 + tr(\nabla_x^2\log p_\theta (\bold{x}))] \\&amp;=
-\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||s_\theta(x)||^2 +
-tr(\nabla_\bold{x}s_\theta (\bold{x}))].\end{aligned}
+\begin{aligned} \int &amp;p(\bf{x})[\frac{1}{2}||\nabla_x\log p_\theta
+(\bf{x})||^2 + tr(\nabla_x^2\log p_\theta (\bf{x}))]d\bf{x} \\&amp;=
+\mathbb{E}_{x\sim p(x)}[\frac{1}{2}||\nabla_x\log p_\theta (\bf{x})||^2
++ tr(\nabla_x^2\log p_\theta (\bf{x}))] \\&amp;= \mathbb{E}_{x\sim
+p(x)}[\frac{1}{2}||s_\theta(x)||^2 + tr(\nabla_\bf{x}s_\theta
+(\bf{x}))].\end{aligned}
 \]</span></p>
 <p>Derivation of score matching can be found on <a target="_blank" rel="noopener" href="https://www.notion.so/Score-Matching-8de16bc8c87d44a4a0eb167c11b02d88?pvs=21">Score
 Matching</a>.</p>
@@ -238,12 +238,11 @@ we have to calculate</p>
 Fisher Divergence:</p>
 <p><span class="math display">\[
 \frac{1}{2}\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
-p(x)}[||\bold{v}^T\nabla_{\bold{x}}\log
-p_\theta(\bold{x})-\bold{v}^T\nabla_{\bold{x}}\log p(\bold{x})||^2] \\ =
+p(x)}[||\bf{v}^T\nabla_{\bf{x}}\log
+p_\theta(\bf{x})-\bf{v}^T\nabla_{\bf{x}}\log p(\bf{x})||^2] \\ =
 \mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
-p(x)}[\bold{v}^T\nabla_{\bold{x}}^2\log p_\theta(\bold{x})\bold{v}+
-\frac{1}{2}[\bold{v}^T\nabla_{\bold{x}}\log p_\theta(\bold{x})]^2] +
-const
+p(x)}[\bf{v}^T\nabla_{\bf{x}}^2\log p_\theta(\bf{x})\bf{v}+
+\frac{1}{2}[\bf{v}^T\nabla_{\bf{x}}\log p_\theta(\bf{x})]^2] + const
 \]</span></p>
 <p>When selecting the distribution <span class="math inline">\(p(\bf{z})\)</span>, there is flexibility to choose
 options such as a multivariate standard normal <span class="math inline">\(N(0, I)\)</span> or a multivariate Rademacher
@@ -255,8 +254,8 @@ all these vectors are denoted by <span class="math inline">\(V^{NM} = \{
 defined as{</p>
 <p><span class="math display">\[
 \hat{J}(\theta;X^N,V^{NM}) =
-\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bold{v}_{i,j}^T\nabla_\bold{x}s(\bold{x};\theta)\bold{v}_{ij}
-+\frac{1}{2}\bold{v}_{ij}^Ts(\bold{x};\theta))^2]
+\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bf{v}_{i,j}^T\nabla_\bf{x}s(\bf{x};\theta)\bf{v}_{ij}
++\frac{1}{2}\bf{v}_{ij}^Ts(\bf{x};\theta))^2]
 \]</span></p>
 <p>When <span class="math inline">\(p_{\bf{v}}\)</span> is a
 multivariate standard normal or multivariate Rademacher distribution, we
@@ -267,8 +266,8 @@ p(\bf{z})}[(\bf{v}_{ij}^Ts(\bf{x};\theta))^2] =
 estimator with lower variance:</p>
 <p><span class="math display">\[
 \hat{J}_{vr}(\theta;X^N,V^{NM}) =
-\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bold{v}_{i,j}^T\nabla_\bold{x}s(\bold{x};\theta)\bold{v}_{ij}
-+\frac{1}{2}||s(\bold{x};\theta)||_2^2]
+\frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bf{v}_{i,j}^T\nabla_\bf{x}s(\bf{x};\theta)\bf{v}_{ij}
++\frac{1}{2}||s(\bf{x};\theta)||_2^2]
 \]</span></p>
 <p>The author refers to this version as sliced score matching with
 variance reduction(SSM-VR), and it has better performance
@@ -303,10 +302,13 @@ Estimation</a></p>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/06/08/Probability%20Flow%20ODE/" rel="prev" title="Probability Flow ODE">
-      <i class="fa fa-chevron-left"></i> Probability Flow ODE
+    <a href="/2023/06/08/Consistency%20Model/" rel="prev" title="Consistency Model">
+      <i class="fa fa-chevron-left"></i> Consistency Model
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/06/08/Probability%20Flow%20ODE/" rel="next" title="Probability Flow ODE">
+      Probability Flow ODE <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
