@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Probability Flow ODE Definition Consider the following SDE: \[ d\bold{x} &#x3D; \bold{f}(\bold{x},t)dt + \bold{G}(\bold{x},t)d\bold{w}, \] where \(\bold{f}(\cdot,t): \mathbb{R}^d \rightarrow \mathbb{R}^d,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Probability Flow ODE">
+<meta property="og:url" content="http://ateb14.github.io/2023/06/08/Probability%20Flow%20ODE/index.html">
+<meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
+<meta property="og:description" content="Probability Flow ODE Definition Consider the following SDE: \[ d\bold{x} &#x3D; \bold{f}(\bold{x},t)dt + \bold{G}(\bold{x},t)d\bold{w}, \] where \(\bold{f}(\cdot,t): \mathbb{R}^d \rightarrow \mathbb{R}^d,">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-08T04:10:00.000Z">
+<meta property="article:modified_time" content="2023-06-08T07:48:18.460Z">
+<meta property="article:author" content="WANG YIYANG">
+<meta property="article:tag" content="Deep Learning">
+<meta property="article:tag" content="Generative Models">
+<meta property="article:tag" content="mathematics">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://ateb14.github.io/2023/06/08/Probability%20Flow%20ODE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Probability Flow ODE | WANG YIYANG's BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">WANG YIYANG's BLOG</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Hello there!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://ateb14.github.io/2023/06/08/Probability%20Flow%20ODE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/wyy.jpeg">
+      <meta itemprop="name" content="WANG YIYANG">
+      <meta itemprop="description" content="A junior student from the School of EECS, Peking University.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WANG YIYANG's BLOG">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Probability Flow ODE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-08 12:10:00 / Modified: 15:48:18" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Generative-Models/" itemprop="url" rel="index"><span itemprop="name">Generative Models</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="probability-flow-ode">Probability Flow ODE</h1>
+<h1 id="definition">Definition</h1>
+<p>Consider the following SDE:</p>
+<p><span class="math display">\[
+d\bold{x} = \bold{f}(\bold{x},t)dt + \bold{G}(\bold{x},t)d\bold{w},
+\]</span></p>
+<p>where <span class="math inline">\(\bold{f}(\cdot,t): \mathbb{R}^d
+\rightarrow \mathbb{R}^d, \bold{G}(\cdot,t): \mathbb{R}^d \rightarrow
+\mathbb{R}^{d\times d}\)</span>.</p>
+<p>The marginal probability density <span class="math inline">\(p_t(\bold{x})\)</span> that is produced by the
+given ODE is equivalent to the marginal probability density <span class="math inline">\(p_t(\bold{x})\)</span> that is generated by the
+SDE mentioned above.</p>
+<p><span class="math display">\[
+d\bold{x} =
+\bold{\widetilde{f}}(\bold{x},t)dt,\\  \bold{\widetilde{f}}(\bold{x},t)
+= \bold{f}(\bold{x},t) -
+\frac{1}{2}\nabla\cdot[\bold{G}(\bold{x},t)\bold{G}(\bold{x},t)^T] -
+\frac{1}{2}\bold{G}(\bold{x},t)\bold{G}(\bold{x},t)^T\nabla_{x}\log
+p_t(\bold{x})
+\]</span></p>
+<h1 id="application-in-sde-driven-diffusion">Application in SDE Driven
+Diffusion</h1>
+<p>For a simplified forward process SDE used in SMLD:</p>
+<p><span class="math display">\[
+d\bold{x} = \bold{f}_t(x)dt+g_td\bold{w}.
+\]</span></p>
+<p>Its probability flow ODEs is:</p>
+<p><span class="math display">\[
+d\bold{x} = [\bold{f}_t(x)-\frac{1}{2}g_t^2\nabla_x \log p_t(x)]dt.
+\]</span></p>
+<p>And the reverse SDE(ODE) for it is also <span class="math inline">\(d\bold{x} =
+[\bold{f}_t(x)-\frac{1}{2}g_t^2\nabla_x \log p_t(x)]dt\)</span> .</p>
+<p>It is possible to obtain <span class="math inline">\(x_T\)</span>
+from <span class="math inline">\(x_0\)</span> using this ODE in a
+deterministic manner. Similarly, it is also possible to
+deterministically construct <span class="math inline">\(x_0\)</span>
+from <span class="math inline">\(x_T\)</span> using the reverse process.
+This is equivalent to the Flow Model, which decodes the latent variables
+(noise) using a reversible transformation.</p>
+<p>Probabilistic flow ODE allows us to relate the results of diffusion
+models with the results of flow models, such as accurately calculating
+likelihood and obtaining representations of latent variables. These are
+essentially the benefits of flow models mentioned in the original paper.
+Due to the reversibility of flow models, it also allows us to do image
+editing on the original image in the latent variable space.</p>
+<h1 id="insights">Insights</h1>
+<p>&#x4EE5;&#x4E0B;&#x662F;&#x6211;&#x5BF9;Probability Flow
+ODE&#x7684;&#x4E2A;&#x4EBA;&#x89C1;&#x89E3;&#xFF1A;&#x4ECE;&#x5B8F;&#x89C2;&#x7684;&#x7EDF;&#x8BA1;&#x89D2;&#x5EA6;&#x6765;&#x8BF4;&#xFF0C;&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;SDE&#x9A71;&#x52A8;&#x7684;&#x7CFB;&#x7EDF;&#xFF08;&#x6B64;&#x5904;&#x5047;&#x8BBE;&#x4E3A;thermodynamics&#x4E2D;&#x7684;&#x5206;&#x5B50;&#x8FD0;&#x52A8;&#x573A;&#x666F;&#xFF09;&#xFF0C;SDE&#x63CF;&#x8FF0;&#x4E86;<strong>&#x5728;&#x7ED9;&#x5B9A;&#x96F6;&#x65F6;&#x523B;&#x7684;&#x7C92;&#x5B50;&#x4F4D;&#x7F6E;&#x6982;&#x7387;&#x5206;&#x5E03;&#x7684;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x4E4B;&#x540E;&#x4EFB;&#x610F;&#x7684;&#x65F6;&#x523B;<span class="math inline">\(t\)</span>&#x4E2D;&#x7C92;&#x5B50;&#x4F4D;&#x7F6E;&#x5206;&#x5E03;</strong>&#xFF0C;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;&#x7EDF;&#x8BA1;&#x610F;&#x4E49;&#x4E0A;&#x4FE1;&#x606F;&#xFF0C;&#x5177;&#x4F53;&#x6765;&#x8BF4;&#x5C31;&#x662F;&#x6211;&#x4EEC;&#x5728;<span class="math inline">\(t\)</span>&#x65F6;&#x523B;&#x4EFB;&#x610F;&#x9009;&#x5B9A;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#xFF08;&#x5BF9;&#x5176;&#x672A;&#x6709;&#x5176;&#x4ED6;&#x5DF2;&#x77E5;&#x4FE1;&#x606F;&#xFF09;&#xFF0C;&#x5176;&#x53EF;&#x80FD;&#x51FA;&#x73B0;&#x7684;&#x4F4D;&#x7F6E;&#x5206;&#x5E03;&#x5C31;&#x662F;<span class="math inline">\(p_t(\bold{x})\)</span>&#x3002;</p>
+<p>&#x5BF9;&#x4E8E;&#x6982;&#x7387;&#x6D41;ODE&#x6765;&#x8BF4;&#xFF0C;&#x5176;&#x63CF;&#x8FF0;&#x4E86;&#x53E6;&#x4E00;&#x4E2A;&#x786E;&#x5B9A;&#x6027;&#x7684;&#x52A8;&#x529B;&#x7CFB;&#x7EDF;&#xFF0C;&#x5176;&#x968F;&#x65F6;&#x95F4;&#x6F14;&#x5316;&#x7684;&#x8FB9;&#x7F18;&#x5206;&#x5E03;<span class="math inline">\(\hat{p}_t(\bold{x})\)</span>&#x4E0E;SDE&#x63CF;&#x8FF0;&#x7684;&#x76F8;&#x540C;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#xFF0C;&#x5728;&#x6211;&#x4EEC;&#x5BF9;&#x6574;&#x4E2A;ODE&#x7CFB;&#x7EDF;&#x672A;&#x77E5;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x5728;<span class="math inline">\(t\)</span>&#x65F6;&#x523B;&#x91C7;&#x6837;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x5176;&#x53EF;&#x80FD;&#x51FA;&#x73B0;&#x4F4D;&#x7F6E;&#x7684;&#x6982;&#x7387;&#x5206;&#x5E03;&#x548C;SDE&#x7CFB;&#x7EDF;&#x7684;&#x8FB9;&#x7F18;&#x5206;&#x5E03;&#x76F8;&#x540C;&#xFF0C;&#x800C;&#x7531;&#x4E8E;ODE&#x7684;&#x786E;&#x5B9A;&#x6027;&#xFF0C;&#x6211;&#x4EEC;&#x4E00;&#x65E6;&#x786E;&#x8BA4;&#x4E86;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;&#x65F6;&#x523B;&#x67D0;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x80FD;&#x56DE;&#x6EAF;&#x5E76;&#x9884;&#x77E5;&#x5176;&#x8FC7;&#x53BB;&#x548C;&#x672A;&#x6765;&#x7684;&#x6240;&#x6709;&#x4F4D;&#x7F6E;&#xFF0C;&#x6240;&#x4EE5;&#x6982;&#x7387;&#x6D41;ODE&#x7684;&#x552F;&#x4E00;&#x4E0D;&#x786E;&#x5B9A;&#x6027;&#x6765;&#x81EA;&#x4E8E;&#x672A;&#x89C2;&#x6D4B;&#xFF0C;&#x4E00;&#x65E6;&#x8FDB;&#x884C;&#x4E86;&#x89C2;&#x6D4B;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x80FD;&#x786E;&#x5B9A;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#x6240;&#x6709;&#x65F6;&#x523B;&#x7684;&#x4F4D;&#x7F6E;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;<span class="math inline">\(p_t(\bold{x}|\bold{x}_{observed}) =
+\delta(\bold{x}-\bold{x}_{t,observed})\)</span>&#xFF0C;&#x5176;&#x4E2D;<span class="math inline">\(\bold{x}_{t,observed}\)</span>&#x7531;&#x89C2;&#x6D4B;&#x503C;&#x6839;&#x636E;ODE&#x552F;&#x4E00;&#x786E;&#x5B9A;&#x3002;</p>
+<p>&#x800C;&#x5BF9;SDE&#x7CFB;&#x7EDF;&#x6765;&#x8BF4;&#xFF0C;&#x4E00;&#x6B21;&#x89C2;&#x6D4B;&#x5E76;&#x65E0;&#x6CD5;&#x6D88;&#x9664;&#x6240;&#x6709;&#x7684;&#x4E0D;&#x786E;&#x5B9A;&#x6027;&#xFF0C;&#x5373;&#x4F7F;&#x6211;&#x4EEC;&#x5728;<span class="math inline">\(t\)</span>&#x65F6;&#x523B;&#x4E0B;&#x5BF9;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#x7684;&#x4F4D;&#x7F6E;&#x8FDB;&#x884C;&#x91C7;&#x6837;&#x89C2;&#x6D4B;&#x5230;&#x4E86;&#x5176;&#x4F4D;&#x7F6E;&#xFF0C;&#x5176;&#x4E4B;&#x524D;&#x4E4B;&#x540E;&#x7684;&#x4F4D;&#x7F6E;&#x4F9D;&#x65E7;&#x662F;&#x4E0D;&#x786E;&#x5B9A;&#x7684;&#xFF0C;&#x4E5F;&#x5373;<span class="math inline">\(p_t(\bold{x}|\bold{x}_{observed})\)</span>&#x65E0;&#x6CD5;&#x7528;&#x72C4;&#x62C9;&#x514B;&#x51FD;&#x6570;&#x63CF;&#x8FF0;&#xFF0C;&#x4F46;&#x76F8;&#x6BD4;<span class="math inline">\(p_t(\bold{x})\)</span>&#x5176;&#x4E0D;&#x786E;&#x5B9A;&#x6027;&#xFF08;&#x4F8B;&#x5982;&#x65B9;&#x5DEE;&#xFF09;&#x4F1A;&#x5C0F;&#x5F88;&#x591A;&#x3002;</p>
+<p>&#x56E0;&#x6B64;&#xFF0C;SDE&#x548C;&#x5176;&#x5BF9;&#x5E94;&#x7684;&#x6982;&#x7387;&#x6D41;ODE&#x7CFB;&#x7EDF;&#x7684;&#x76F8;&#x540C;&#x4E4B;&#x5904;&#x662F;&#x4ECE;&#x5B8F;&#x89C2;&#x89D2;&#x5EA6;&#x4E0A;&#x53BB;&#x5B9A;&#x4E49;&#x7684;&#xFF0C;&#x5373;&#x6BCF;&#x65F6;&#x6BCF;&#x523B;&#x7684;&#x91C7;&#x6837;&#xFF08;&#x4EFB;&#x53D6;&#x4E00;&#x4E2A;&#x7C92;&#x5B50;&#x8FDB;&#x884C;&#x89C2;&#x6D4B;&#xFF09;&#x90FD;&#x4F1A;&#x670D;&#x4ECE;&#x76F8;&#x540C;&#x7684;&#x5206;&#x5E03;&#xFF08;&#x5F53;&#x91C7;&#x6837;&#x4E86;&#x540C;&#x65F6;&#x523B;&#x8DB3;&#x591F;&#x591A;&#x7684;&#x7C92;&#x5B50;&#x540E;&#xFF0C;&#x5176;&#x9891;&#x7387;&#x5206;&#x5E03;&#x5E94;&#x8BE5;&#x662F;&#x57FA;&#x672C;&#x4E00;&#x81F4;&#x7684;&#xFF09;&#xFF0C;&#x8FD9;&#x662F;&#x4E00;&#x4E2A;<strong>&#x7FA4;&#x4F53;&#x4E0A;&#x7684;&#x5B8F;&#x89C2;&#x6027;&#x8D28;</strong>&#xFF0C;&#x4F46;&#x4E00;&#x65E6;&#x6211;&#x4EEC;&#x8FDB;&#x884C;&#x4E86;&#x4E00;&#x6B21;&#x89C2;&#x6D4B;&#x540E;&#x8BD5;&#x56FE;&#x8FFD;&#x6EAF;<strong>&#x540C;&#x4E00;&#x4E2A;</strong>&#x7C92;&#x5B50;&#x7684;&#x8F68;&#x8FF9;&#x65F6;&#xFF0C;&#x4E8B;&#x5B9E;&#x4E0A;&#x4E24;&#x4E2A;&#x7CFB;&#x7EDF;&#x7684;&#x8868;&#x73B0;&#x662F;&#x4E0D;&#x540C;&#x7684;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x503C;&#x5F97;&#x6CE8;&#x610F;&#x7684;&#x4E8B;&#x5B9E;&#x5C31;&#x662F;&#xFF0C;DDIM&#x91C7;&#x6837;&#x8FC7;&#x7A0B;&#x786E;&#x5B9A;&#x7684;ODE&#x5176;&#x5B9E;&#x5C31;&#x662F;&#x6982;&#x7387;&#x6D41;ODE&#x7684;&#x4E00;&#x4E2A;&#x7279;&#x4F8B;&#x3002;</p>
+<p>Here is my personal view on Probability Flow ODE: From a macroscopic
+statistical perspective, for a system driven by SDE (assuming a scenario
+of molecular motion in thermodynamics), SDE describes the probability
+distribution of particle positions at any given time t, given the
+probability distribution of particle positions at time zero.
+Specifically, if we randomly select a particle at time <span class="math inline">\(t\)</span> (without any other known information
+about it), its possible position distribution is <span class="math inline">\(p_t(x)\)</span>.</p>
+<p>For Probability Flow ODE, it describes another deterministic dynamic
+system with the same marginal distribution of SDE evolving over time,
+denoted as <span class="math inline">\(\hat{p}_t(x)\)</span>. That is,
+when we have no knowledge about the entire ODE system, the probability
+distribution of a particle&apos;s position at time <span class="math inline">\(t\)</span>, given a sample at time zero, is the
+same as that of the SDE system. Since ODE is deterministic, once we
+determine the position of a particle at any given time, we can trace
+back and predict all its past and future positions. Therefore, the only
+uncertainty of Probability Flow ODE comes from the unobserved particles.
+Once observed, we can determine the position of a particle at all times,
+denoted as <span class="math inline">\(p_t(x| x_{observed}) = \delta(x -
+x_{t, observed})\)</span>, where <span class="math inline">\(x_{t,
+observed}\)</span> is uniquely determined by the observed value
+according to ODE.</p>
+<p>For the SDE system, a single observation cannot eliminate all
+uncertainties. Even if we observe the position of a particle at time t,
+its positions before and after the observation are still uncertain,
+i.e., <span class="math inline">\(p_t(x| x_{observed})\)</span> cannot
+be described using the Dirac delta function. However, compared to <span class="math inline">\(p_t(x)\)</span>, its uncertainty (such as
+variance) will be much smaller.</p>
+<p>Therefore, the similarity between SDE and its corresponding
+Probability Flow ODE system is defined from a macroscopic perspective,
+that is, each sampling at any given time (randomly selecting a particle
+for observation) will follow the same distribution (when enough
+particles are sampled simultaneously, their frequency distribution
+should be basically consistent). This is a macroscopic property of the
+group. However, once we try to trace back the trajectory of the same
+particle after one observation, the performance of the two systems is
+different.</p>
+<p>An important fact to note is that the ODE determined by the DDIM
+sampling process is actually a special case of Probability Flow ODE.</p>
+<h1 id="derivation">Derivation</h1>
+<p>The marginal probability density evolves according to Kolmogorov&#x2019;s
+forward equation (Fokker-Planck equation)</p>
+<p><span class="math display">\[
+\frac{\partial p_t(\bold{x})}{\partial t} =
+-\sum_{i=1}^{d}\frac{\partial}{\partial
+x_i}[f_i(\bold{x},t)p_t(\bold{x})] +
+\frac{1}{2}\sum_{i=1}^{d}\sum_{j=1}^{d}\frac{\partial ^2}{\partial x_i
+\partial x_j}[p_t(\bold{x})G^i(\bold{x},t)G^j(\bold{x},t)^T],\\
+G(\bold{x},t) = \begin{bmatrix}
+G^1(\bold{x},t) \\ ...\\
+G^d(\bold{x},t)
+\end{bmatrix}
+\]</span></p>
+<p>to be continued</p>
+<h1 id="reference">Reference</h1>
+<p>[1] Song et al(2021). Score-based Generative Modeling Through
+Stochastic Differential Equations.</p>
+<p>Websites:</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/622771940">Diffusion&#x5B66;&#x4E60;&#x7B14;&#x8BB0;&#xFF08;&#x56DB;&#xFF09;&#x2014;&#x2014;&#x6982;&#x7387;&#x6D41;ODE&#xFF08;Probability
+flow ODE&#xFF09;</a></p>
+<p><a target="_blank" rel="noopener" href="https://kexue.fm/archives/9228">&#x751F;&#x6210;&#x6269;&#x6563;&#x6A21;&#x578B;&#x6F2B;&#x8C08;&#xFF08;&#x516D;&#xFF09;&#xFF1A;&#x4E00;&#x822C;&#x6846;&#x67B6;&#x4E4B;ODE&#x7BC7;
+- &#x79D1;&#x5B66;&#x7A7A;&#x95F4;|Scientific Spaces</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Deep-Learning/" rel="tag"># Deep Learning</a>
+              <a href="/tags/Generative-Models/" rel="tag"># Generative Models</a>
+              <a href="/tags/mathematics/" rel="tag"># mathematics</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/06/08/Sliced%20Score%20Matching/" rel="prev" title="Sliced Score Matching">
+      <i class="fa fa-chevron-left"></i> Sliced Score Matching
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#probability-flow-ode"><span class="nav-number">1.</span> <span class="nav-text">Probability Flow ODE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#definition"><span class="nav-number">2.</span> <span class="nav-text">Definition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#application-in-sde-driven-diffusion"><span class="nav-number">3.</span> <span class="nav-text">Application in SDE Driven
+Diffusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#insights"><span class="nav-number">4.</span> <span class="nav-text">Insights</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#derivation"><span class="nav-number">5.</span> <span class="nav-text">Derivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WANG YIYANG"
+      src="/images/wyy.jpeg">
+  <p class="site-author-name" itemprop="name">WANG YIYANG</p>
+  <div class="site-description" itemprop="description">A junior student from the School of EECS, Peking University.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/ateb14" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;ateb14" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WANG YIYANG</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+</body>
+</html>
