@@ -28,7 +28,7 @@
 <meta property="og:description" content="Sliced Score Matching Last edited time: May 19, 2023 4:54 PM Owner: YY W Tags: Technique Background The optimization object of score matching is \[ \begin{aligned} \int &amp;p(\bold{x})[\frac{1}{2}||\">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-06-08T04:10:00.000Z">
-<meta property="article:modified_time" content="2023-06-08T07:48:43.864Z">
+<meta property="article:modified_time" content="2023-06-08T08:00:11.907Z">
 <meta property="article:author" content="WANG YIYANG">
 <meta property="article:tag" content="Deep Learning">
 <meta property="article:tag" content="Generative Models">
@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-06-08 12:10:00 / Modified: 15:48:43" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
+              <time title="Created: 2023-06-08 12:10:00 / Modified: 16:00:11" itemprop="dateCreated datePublished" datetime="2023-06-08T12:10:00+08:00">2023-06-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -227,14 +227,14 @@ tr(\nabla_\bold{x}s_\theta (\bold{x}))].\end{aligned}
 Matching</a>.</p>
 <p>However, naive score matching is NOT scalable. Suppose that we train
 a deep neural network which outputs a d-dimension vector as the
-estimation of the score function. Computing <span class="math inline">\(tr(\nabla_\bold{x}s_\theta(\bold{x}))\)</span>
+estimation of the score function. Computing <span class="math inline">\(tr(\nabla_\bf{x}s_\theta(\bf{x}))\)</span>
 requires <span class="math inline">\(O(d)\)</span> backpropagation since
 we have to calculate</p>
 <p><span class="math display">\[
 \{ \frac{\partial s_{\theta,i}(x)}{\partial x_i}| i\in\{1,2,...,d\}\}.
 \]</span></p>
 <h1 id="sliced-score-matching-1">Sliced Score Matching</h1>
-<p>Project the score function onto random vectors <span class="math inline">\(\bold{v}\)</span>, which introduces the Sliced
+<p>Project the score function onto random vectors <span class="math inline">\(\bf{v}\)</span>, which introduces the Sliced
 Fisher Divergence:</p>
 <p><span class="math display">\[
 \frac{1}{2}\mathbb{E}_{v\sim p(v)}\mathbb{E}_{x\sim
@@ -245,25 +245,25 @@ p(x)}[\bold{v}^T\nabla_{\bold{x}}^2\log p_\theta(\bold{x})\bold{v}+
 \frac{1}{2}[\bold{v}^T\nabla_{\bold{x}}\log p_\theta(\bold{x})]^2] +
 const
 \]</span></p>
-<p>When selecting the distribution <span class="math inline">\(p(\bold{z})\)</span>, there is flexibility to
-choose options such as a multivariate standard normal <span class="math inline">\(N(0, I)\)</span> or a multivariate Rademacher
+<p>When selecting the distribution <span class="math inline">\(p(\bf{z})\)</span>, there is flexibility to choose
+options such as a multivariate standard normal <span class="math inline">\(N(0, I)\)</span> or a multivariate Rademacher
 distribution (which is the uniform distribution over <span class="math inline">\(\{&#xB1;1\}^D\)</span>).</p>
-<p>In practice, when working with a dataset <span class="math inline">\(X^N = \{\bold{x}_1, \bold{x}_2,...,\bold{x}_n
-\}\)</span><em>,</em> we draw <em><span class="math inline">\(M\)</span></em> random projections from <span class="math inline">\(p_\bold{v}\)</span> for each point <span class="math inline">\(\bold{x}_i\)</span> independently. The collection
-of all these vectors are denoted by <span class="math inline">\(V^{NM} =
-\{ \bold{v}_{ij}\}_{1\le i\le N, 1\le j\le M}\)</span>. The estimator
-can be defined as{</p>
+<p>In practice, when working with a dataset <span class="math inline">\(X^N = \{\bf{x}_1, \bf{x}_2,...,\bf{x}_n
+\}\)</span><em>,</em> we draw <em><span class="math inline">\(M\)</span></em> random projections from <span class="math inline">\(p_\bf{v}\)</span> for each point <span class="math inline">\(\bf{x}_i\)</span> independently. The collection of
+all these vectors are denoted by <span class="math inline">\(V^{NM} = \{
+\bf{v}_{ij}\}_{1\le i\le N, 1\le j\le M}\)</span>. The estimator can be
+defined as{</p>
 <p><span class="math display">\[
 \hat{J}(\theta;X^N,V^{NM}) =
 \frac{1}{N}\frac{1}{M}\sum_{i=1}^{N}\sum_{i=1}^{M}[\bold{v}_{i,j}^T\nabla_\bold{x}s(\bold{x};\theta)\bold{v}_{ij}
 +\frac{1}{2}\bold{v}_{ij}^Ts(\bold{x};\theta))^2]
 \]</span></p>
-<p>When <span class="math inline">\(p_{\bold{v}}\)</span> is a
+<p>When <span class="math inline">\(p_{\bf{v}}\)</span> is a
 multivariate standard normal or multivariate Rademacher distribution, we
 have</p>
-<p><span class="math inline">\(\mathbb{E}_{\bold{z}\sim
-p(\bold{z})}[(\bold{v}_{ij}^Ts(\bold{x};\theta))^2] =
-||s(\bold{x};\theta)||^2_2\)</span>, which may lead to a simplified
+<p><span class="math inline">\(\mathbb{E}_{\bf{z}\sim
+p(\bf{z})}[(\bf{v}_{ij}^Ts(\bf{x};\theta))^2] =
+||s(\bf{x};\theta)||^2_2\)</span>, which may lead to a simplified
 estimator with lower variance:</p>
 <p><span class="math display">\[
 \hat{J}_{vr}(\theta;X^N,V^{NM}) =
@@ -273,10 +273,10 @@ estimator with lower variance:</p>
 <p>The author refers to this version as sliced score matching with
 variance reduction(SSM-VR), and it has better performance
 empirically.</p>
-<p>If we train a neural network <span class="math inline">\(h_\theta(\bold{x})\)</span> to predict the score
+<p>If we train a neural network <span class="math inline">\(h_\theta(\bf{x})\)</span> to predict the score
 function, then we only need <span class="math inline">\(O(1)\)</span>
-backpropagation to calculate <span class="math inline">\(\nabla_{\bold{x}}[\bold{v}^Th_{\theta}(\bold{x})]
-=\bold{v}^T\nabla_{\bold{x}}h_{\theta}(\bold{x})\)</span> .</p>
+backpropagation to calculate <span class="math inline">\(\nabla_{\bf{x}}[\bf{v}^Th_{\theta}(\bf{x})]
+=\bf{v}^T\nabla_{\bf{x}}h_{\theta}(\bf{x})\)</span> .</p>
 <h1 id="reference">Reference</h1>
 <p>[1] Song et al(2019). Sliced Score Matching: A Scalable Approach to
 Density and Score Estimation.</p>
@@ -303,13 +303,10 @@ Estimation</a></p>
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/06/08/Consistency%20Model/" rel="prev" title="Consistency Model">
-      <i class="fa fa-chevron-left"></i> Consistency Model
+    <a href="/2023/06/08/Probability%20Flow%20ODE/" rel="prev" title="Probability Flow ODE">
+      <i class="fa fa-chevron-left"></i> Probability Flow ODE
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/06/08/Probability%20Flow%20ODE/" rel="next" title="Probability Flow ODE">
-      Probability Flow ODE <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     

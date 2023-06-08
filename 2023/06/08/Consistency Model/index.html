@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"ateb14.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Consistency Model Background Probability Flow ODE Consider the following SDE used in diffusion model: \[ d\bold{x_t} &#x3D; \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}. \] A probability flow ODE(PF ODE) s">
+  <meta name="description" content="Consistency Model Background Probability Flow ODE Consider the following SDE used in diffusion model: \[ d\bf{x_t} &#x3D; \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}. \] A probability flow ODE(PF ODE) sha">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Consistency Model">
 <meta property="og:url" content="http://ateb14.github.io/2023/06/08/Consistency%20Model/index.html">
 <meta property="og:site_name" content="WANG YIYANG&#39;s BLOG">
-<meta property="og:description" content="Consistency Model Background Probability Flow ODE Consider the following SDE used in diffusion model: \[ d\bold{x_t} &#x3D; \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}. \] A probability flow ODE(PF ODE) s">
+<meta property="og:description" content="Consistency Model Background Probability Flow ODE Consider the following SDE used in diffusion model: \[ d\bf{x_t} &#x3D; \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}. \] A probability flow ODE(PF ODE) sha">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://ateb14.github.io/2023/06/08/Consistency%20Model/Untitled.png">
 <meta property="og:image" content="http://ateb14.github.io/2023/06/08/Consistency%20Model/Untitled%201.png">
 <meta property="og:image" content="http://ateb14.github.io/2023/06/08/Consistency%20Model/Untitled%202.png">
 <meta property="og:image" content="http://ateb14.github.io/2023/06/08/Consistency%20Model/Untitled%203.png">
 <meta property="article:published_time" content="2023-06-08T04:00:04.000Z">
-<meta property="article:modified_time" content="2023-06-08T07:46:57.014Z">
+<meta property="article:modified_time" content="2023-06-08T07:59:34.580Z">
 <meta property="article:author" content="WANG YIYANG">
 <meta property="article:tag" content="Deep Learning">
 <meta property="article:tag" content="Generative Models">
@@ -192,7 +192,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-06-08 12:00:04 / Modified: 15:46:57" itemprop="dateCreated datePublished" datetime="2023-06-08T12:00:04+08:00">2023-06-08</time>
+              <time title="Created: 2023-06-08 12:00:04 / Modified: 15:59:34" itemprop="dateCreated datePublished" datetime="2023-06-08T12:00:04+08:00">2023-06-08</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -221,7 +221,7 @@
 Flow ODE</a></p>
 <p>Consider the following SDE used in diffusion model:</p>
 <p><span class="math display">\[
-d\bold{x_t} = \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}.
+d\bf{x_t} = \bold{\mu}(\bold{x_t},t)dt+\sigma(t)\bold{w}.
 \]</span></p>
 <p>A probability flow ODE(PF ODE) shares the same marginal probability
 distribution as it:</p>
@@ -229,23 +229,23 @@ distribution as it:</p>
 d\bold{x_t} = [\bold{\mu}(\bold{x_t},t)-\frac{1}{2}\sigma(t)^2\nabla_x
 \log p_t(\bold{x_t})]dt.
 \]</span></p>
-<p>In this paper, the author proposes using <span class="math inline">\(\mu(\bold{x},t) = \bold{0}\)</span> and <span class="math inline">\(\sigma(t) = \sqrt{2t}\)</span> in Karras et al.
+<p>In this paper, the author proposes using <span class="math inline">\(\mu(\bf{x},t) = \bf{0}\)</span> and <span class="math inline">\(\sigma(t) = \sqrt{2t}\)</span> in Karras et al.
 (2022), which results in the <em>empirical PF ODE</em>:</p>
 <p><span class="math display">\[
 \frac{d\bold{x}_t}{d_t} = -ts_\phi(\bold{x}_t,t).
 \]</span></p>
 <h1 id="definition">Definition</h1>
-<p>Given a solution trajectory solution <span class="math inline">\(\{\bold{x}_t\}_{t\in[\epsilon,T]}\)</span> of the
-PF ODE, the consistency function is defined as <span class="math inline">\(\bold{f}:(\bold{x}_t,t)\mapsto\bold{x}_{\epsilon}\)</span>
+<p>Given a solution trajectory solution <span class="math inline">\(\{\bf{x}_t\}_{t\in[\epsilon,T]}\)</span> of the PF
+ODE, the consistency function is defined as <span class="math inline">\(\bf{f}:(\bf{x}_t,t)\mapsto\bf{x}_{\epsilon}\)</span>
 which has a property called self-consistency: its outputs are consistent
-for arbitrary pairs of <span class="math inline">\((\bold{x}_t,
+for arbitrary pairs of <span class="math inline">\((\bf{x}_t,
 t)\)</span> that belong to the same PF ODE trajectory, <em>i.e</em>.,
-<span class="math inline">\(\bold{f}(\bold{x}_t,t) =
-\bold{f}(\bold{x}_{t&apos;},t&apos;)\)</span> for all <span class="math inline">\(t,t&apos; \in [&#x3B5;,T]\)</span>.</p>
+<span class="math inline">\(\bf{f}(\bf{x}_t,t) =
+\bf{f}(\bf{x}_{t&apos;},t&apos;)\)</span> for all <span class="math inline">\(t,t&apos; \in [&#x3B5;,T]\)</span>.</p>
 <p>The aforementioned definition implies a boundary condition where any
-<span class="math inline">\(\bold{f}(\cdot,\epsilon)\)</span> is an
-identity function, meaning that <span class="math inline">\(\bold{f}(\bold{x}_\epsilon,\epsilon) =
-\bold{x}_\epsilon\)</span>. For consistency models based on deep neural
+<span class="math inline">\(\bf{f}(\cdot,\epsilon)\)</span> is an
+identity function, meaning that <span class="math inline">\(\bf{f}(\bf{x}_\epsilon,\epsilon) =
+\bf{x}_\epsilon\)</span>. For consistency models based on deep neural
 networks, the author proposes using a skip link which enforces the model
 to respect the boundary condition:</p>
 <p><span class="math display">\[
@@ -256,9 +256,9 @@ to respect the boundary condition:</p>
 <span class="math inline">\(s.t.\)</span> <span class="math inline">\(c_{skip}(\epsilon)=1\)</span> and <span class="math inline">\(c_{out}(\epsilon)=0\)</span>.</p>
 <h2 id="sampling">Sampling</h2>
 <p>The sampling process involves only one forward pass through the
-consistency model where a sample from <span class="math inline">\(\hat{\bold{x}}_T\sim \mathcal{N}(\bold{0},T^2
-I)\)</span> is fed to the neural network <span class="math inline">\(\bold{f}_\theta(\hat{\bold{x}}_T,T)\)</span>.
-(Single Step)</p>
+consistency model where a sample from <span class="math inline">\(\hat{\bf{x}}_T\sim \mathcal{N}(\bf{0},T^2
+I)\)</span> is fed to the neural network <span class="math inline">\(\bf{f}_\theta(\hat{\bf{x}}_T,T)\)</span>. (Single
+Step)</p>
 <p>&#x201C;<em>Importantly, one can also evaluate the consistency model
 multiple times by alternating denoising and noise injection steps for
 improved sample quality.&#x201D;</em></p>
@@ -274,9 +274,9 @@ improved sample quality.&#x201D;</em></p>
 p_{data}}\mathbb{E}_{n \sim
 \mathcal{U}[0,N-1]}[\lambda(n)d(\bold{f}_\theta(\bold{x}_{t_{n+1}},t_{n+1}),\bold{f}_{\theta^-}(\bold{\hat{x}}_{t_n}^\phi,t_{n}))],
 \]</span></p>
-<p>where <span class="math inline">\(\bold{x}_{t_{n+1}} \sim
-\mathcal{N}(\bold{0},t_{n+1}^2)\)</span> and <span class="math inline">\(\bold{\hat{x}}_{t_n}^\phi\)</span> is estimated
-using a ODE solver given a pre-trained score model <span class="math inline">\(s_\phi(\bold{x},t)\)</span>:</p>
+<p>where <span class="math inline">\(\bf{x}_{t_{n+1}} \sim
+\mathcal{N}(\bf{0},t_{n+1}^2)\)</span> and <span class="math inline">\(\bf{\hat{x}}_{t_n}^\phi\)</span> is estimated
+using a ODE solver given a pre-trained score model <span class="math inline">\(s_\phi(\bf{x},t)\)</span>:</p>
 <p><span class="math display">\[
 \bold{\hat{x}}_{t_n}^\phi := \bold{x}_{t_{n+1}} -
 (t_n-t_{n+1})t_{n+1}s_\phi(\bold{x}_{t_{n+1}},t_{n+1}).
@@ -291,7 +291,7 @@ average(EMA) of the past arguments <span class="math inline">\(\theta\)</span> d
 <figcaption aria-hidden="true">Untitled</figcaption>
 </figure>
 <h2 id="consistency-trainingct">Consistency Training(CT)</h2>
-<p>There exists an unbiased estimator of <span class="math inline">\(\nabla\log p_t(\bold{x}_t)\)</span>:</p>
+<p>There exists an unbiased estimator of <span class="math inline">\(\nabla\log p_t(\bf{x}_t)\)</span>:</p>
 <p><span class="math display">\[
 \nabla\log p_t(\bold{x}_t) =
 -\mathbb{E}_{\bold{x}_t\sim\mathcal{N}(\bold{0},t^2I)}[\frac{\bold{x}_t-\bold{x}}{t^2}].
@@ -303,10 +303,10 @@ p_{data}}\mathbb{E}_{n \sim
 \mathcal{U}[0,N-1]}[\lambda(n)d(\bold{f}_\theta(\bold{x}+t_{n+1}\bold{z},t_{n+1}),\bold{f}_{\theta^-}(\bold{x}+t_{n}\bold{z},t_{n}))],
 \]</span></p>
 <p>where <span class="math inline">\(z\sim \mathcal
-N(\bold{0},I)\)</span>.</p>
+N(\bf{0},I)\)</span>.</p>
 <p>Assume that the pre-trained score model matches the ground truth
-<span class="math inline">\(s.t.\)</span> <span class="math inline">\(s_\phi(\bold{x},t) \equiv \nabla \log
-p_t(\bold{x})\)</span>, with some additional boundary restrictions,
+<span class="math inline">\(s.t.\)</span> <span class="math inline">\(s_\phi(\bf{x},t) \equiv \nabla \log
+p_t(\bf{x})\)</span>, with some additional boundary restrictions,
 then:</p>
 <p><span class="math display">\[
 \mathcal{L}_{CD}^N(\theta,\theta^-;\phi)  =
@@ -324,17 +324,16 @@ then:</p>
 <img src="/2023/06/08/Consistency%20Model/Untitled%203.png" alt="Untitled">
 <figcaption aria-hidden="true">Untitled</figcaption>
 </figure>
-<p>Here <span class="math inline">\(\bold{y}\)</span> is a reference
-image that guides sample generation, <span class="math inline">\(\bold{\Omega}\)</span> is a binary mask, <span class="math inline">\(\odot\)</span> computes element-wise products, and
+<p>Here <span class="math inline">\(\bf{y}\)</span> is a reference image
+that guides sample generation, <span class="math inline">\(\bf{\Omega}\)</span> is a binary mask, <span class="math inline">\(\odot\)</span> computes element-wise products, and
 <span class="math inline">\(A\)</span> is an invertible linear
 transformation that maps images into a latent space where the
-conditional information in <span class="math inline">\(\bold{y}\)</span>
-is infused into the iterative generation procedure by masking with <span class="math inline">\(\bold{\Omega}\)</span>.</p>
+conditional information in <span class="math inline">\(\bf{y}\)</span>
+is infused into the iterative generation procedure by masking with <span class="math inline">\(\bf{\Omega}\)</span>.</p>
 <h3 id="inpainting">Inpainting</h3>
-<p><span class="math inline">\(\bold{y}\)</span> is an image where
-missing pixels are masked out, <span class="math inline">\(\bold{\Omega}\)</span> is a binary mask where 1
-indicates the missing pixels, and <span class="math inline">\(A\)</span>
-is the identity transformation.</p>
+<p><span class="math inline">\(\bf{y}\)</span> is an image where missing
+pixels are masked out, <span class="math inline">\(\bf{\Omega}\)</span>
+is a binary mask where 1 indicates the missing pixels, and <span class="math inline">\(A\)</span> is the identity transformation.</p>
 <p><strong>Colorization, Super-resolution, Stroke-guided image
 generation, Denoising, Interpolation&#x2026;.</strong></p>
 
@@ -360,8 +359,8 @@ generation, Denoising, Interpolation&#x2026;.</strong></p>
       <i class="fa fa-chevron-left"></i> Foundation of Generative Models
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/06/08/Sliced%20Score%20Matching/" rel="next" title="Sliced Score Matching">
-      Sliced Score Matching <i class="fa fa-chevron-right"></i>
+    <a href="/2023/06/08/Probability%20Flow%20ODE/" rel="next" title="Probability Flow ODE">
+      Probability Flow ODE <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
