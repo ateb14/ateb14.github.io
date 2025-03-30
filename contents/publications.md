@@ -1,0 +1,1 @@
+- Xi Chen, Yutong Feng, Mengting Chen, <strong><strong>Yiyang Wang</strong></strong>, Shilong Zhang, Yu Liu, Yujun Shen, Hengshuang Zhao Zero-shot Image Editing with Reference Imitation. NeurIPS, 2024.*[[Paper]](https://arxiv.org/abs/2406.07547)
