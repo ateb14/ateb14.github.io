@@ -16,11 +16,9 @@
 If you need a reliable teammate who is familiar with <strong style="color:red;"><strong>both NLP and computer systems </strong></strong> with <strong style="color:red;"><strong>extensive industry experiences</strong></strong>, feel free to <a href="#contact-info">Contact Me</a>! -->
 
 
-#### Biography
-
 My name is Yiyang Wang. 
 I am a first-year (starting from 2024) Ph.D. student at the University of Hong Kong, supervised by Prof. [Hengshuang Zhao](https://hszhao.github.io). 
 Before joining HKU, I got my bachelor degree in computer science at Peking University in July 2024. 
 My research interests lie in the field of deep learning and computer vision, especially for AIGC and multi-modal models. 
-I enjoy exploring the world through my footsteps, my eyes, and my Nikon Zf.
+I enjoy exploring the world through my footsteps, my eyes, and my Nikon Zf📷.
 
